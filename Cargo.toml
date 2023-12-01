@@ -1,0 +1,11 @@
+[profile.release]
+debug = true
+
+[workspace]
+
+resolver = "2"
+
+members = [
+    "advent_2023_common",
+    "day01",
+]
