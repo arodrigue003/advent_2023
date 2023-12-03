@@ -59,7 +59,7 @@ fn parse_game(input: &str) -> IResult<&str, Game> {
 
 pub fn parse_data(data: &str) -> Vec<Game> {
     let (res, games) = many1(parse_game).parse(data).unwrap();
-    if res != "" {
+    if !res.is_empty() {
         panic!("Unable to fully parse the input: {}", res);
     }
 

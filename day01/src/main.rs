@@ -10,7 +10,7 @@ fn solve_part_one(data: &str) -> u32 {
             let (_, first, last) = line
                 .chars()
                 .filter_map(|char| {
-                    if char.is_digit(10) {
+                    if char.is_ascii_digit() {
                         Some(char as u32 - ZERO_VALUE)
                     } else {
                         None
@@ -43,7 +43,7 @@ fn solve_part_two(data: &str) -> u32 {
                 .replace("nine", "nine9nine")
                 .chars()
                 .filter_map(|char| {
-                    if char.is_digit(10) {
+                    if char.is_ascii_digit() {
                         Some(char as u32 - ZERO_VALUE)
                     } else {
                         None
@@ -63,7 +63,7 @@ fn solve_part_two(data: &str) -> u32 {
 
 fn main() {
     let args = get_args();
-    let data: String = fs::read_to_string(&args.path).unwrap();
+    let data: String = fs::read_to_string(args.path).unwrap();
 
     println!("Part one solution: {}", solve_part_one(&data));
     println!("Part two solution: {}", solve_part_two(&data));
@@ -74,13 +74,13 @@ mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
 
-    static INPUT_EXAMPLE_1: &'static str = "1abc2
+    static INPUT_EXAMPLE_1: &str = "1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet
 ";
 
-    static INPUT_EXAMPLE_2: &'static str = "two1nine
+    static INPUT_EXAMPLE_2: &str = "two1nine
 eightwothree
 abcone2threexyz
 xtwone3four

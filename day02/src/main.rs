@@ -1,7 +1,8 @@
+use std::fs;
+
 use advent_2023_common::get_args;
 use day02::models::Game;
 use day02::parser;
-use std::fs;
 
 fn solve_part_one(data: &[Game]) -> u32 {
     data.iter()
@@ -44,11 +45,12 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use day02::models::GameSubset;
     use day02::parser::parse_data;
 
-    static INPUT_EXAMPLE: &'static str = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+    use super::*;
+
+    static INPUT_EXAMPLE: &str = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
 Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
