@@ -6,4 +6,4 @@
 
 # TODO
 
-* [ ] Improve day 05 part 02 solution 
+* [*] Improve day 05 part 02 solution 

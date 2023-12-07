@@ -1,33 +1,16 @@
 use std::fs;
 
 use advent_2023_common::get_args;
-use day05::models::Almanac;
+use day05::logic;
+use day05::models::{Almanac, Range};
 use day05::parser::parse_data;
-use itertools::FoldWhile::{Continue, Done};
 use itertools::Itertools;
-use rayon::prelude::*;
-
-// We make the hypothesis that mappings form a disjoint set of mapping.
-fn map(value: i64, almanac: &Almanac) -> i64 {
-    almanac.mappings.iter().fold(value, |acc, mapping| {
-        mapping
-            .iter()
-            .fold_while(acc, |acc2, mapping| {
-                if acc2 >= mapping.src_start && acc2 < mapping.src_start + mapping.size {
-                    Done(acc2 + mapping.dst_start - mapping.src_start)
-                } else {
-                    Continue(acc2)
-                }
-            })
-            .into_inner()
-    })
-}
 
 fn solve_part_one(almanac: &Almanac) -> i64 {
     almanac
         .seeds
         .iter()
-        .map(|seed| map(*seed, almanac))
+        .map(|seed| logic::map_value(*seed, almanac))
         .min()
         .unwrap()
 }
@@ -37,13 +20,16 @@ fn solve_part_two(almanac: &Almanac) -> i64 {
         .seeds
         .iter()
         .tuples()
-        .map(|(start, size)| {
-            (*start..(*start + *size))
-                .into_par_iter()
-                .map(|seed| map(seed, almanac))
-                .min()
-                .unwrap()
+        .flat_map(|(start, size)| {
+            logic::map_range(
+                Range {
+                    start: *start,
+                    end: *start + *size,
+                },
+                almanac,
+            )
         })
+        .map(|range| range.start)
         .min()
         .unwrap()
 }
@@ -58,7 +44,6 @@ fn main() {
     }
 
     println!("Part one solution: {}", solve_part_one(&parsed_data));
-    // Should take 3-4 minutes
     println!("Part two solution: {}", solve_part_two(&parsed_data));
 }
 
@@ -105,30 +90,31 @@ humidity-to-location map:
 
     #[test]
     fn test_parse_data() {
+        // Mapping order is not the same because we sorted the mapping during the parsing
         assert_eq!(
             parse_data(INPUT_EXAMPLE),
             Almanac {
                 seeds: vec![79, 14, 55, 13,],
                 mappings: vec![
-                    vec![Mapping::new(98, 50, 2), Mapping::new(50, 52, 48),],
+                    vec![Mapping::new(50, 52, 48), Mapping::new(98, 50, 2),],
                     vec![
+                        Mapping::new(0, 39, 15),
                         Mapping::new(15, 0, 37),
                         Mapping::new(52, 37, 2),
-                        Mapping::new(0, 39, 15),
                     ],
                     vec![
-                        Mapping::new(53, 49, 8),
-                        Mapping::new(11, 0, 42),
                         Mapping::new(0, 42, 7),
                         Mapping::new(7, 57, 4),
+                        Mapping::new(11, 0, 42),
+                        Mapping::new(53, 49, 8),
                     ],
                     vec![Mapping::new(18, 88, 7), Mapping::new(25, 18, 70),],
                     vec![
-                        Mapping::new(77, 45, 23),
                         Mapping::new(45, 81, 19),
                         Mapping::new(64, 68, 13),
+                        Mapping::new(77, 45, 23),
                     ],
-                    vec![Mapping::new(69, 0, 1), Mapping::new(0, 1, 69),],
+                    vec![Mapping::new(0, 1, 69), Mapping::new(69, 0, 1),],
                     vec![Mapping::new(56, 60, 37), Mapping::new(93, 56, 4),],
                 ],
             }

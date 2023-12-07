@@ -38,10 +38,16 @@ fn parse_mapping(input: &str) -> IResult<&str, Mapping> {
 }
 
 fn parse_mapping_group(input: &str) -> IResult<&str, Vec<Mapping>> {
-    delimited(
-        tuple((take_until("map:"), tag("map:"), line_ending)),
-        many1(parse_mapping),
-        many0(line_ending),
+    map(
+        delimited(
+            tuple((take_until("map:"), tag("map:"), line_ending)),
+            many1(parse_mapping),
+            many0(line_ending),
+        ),
+        |mut mapping_group| {
+            mapping_group.sort();
+            mapping_group
+        },
     )
     .parse(input)
 }
