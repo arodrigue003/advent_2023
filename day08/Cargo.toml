@@ -7,5 +7,4 @@ edition = "2021"
 
 [dependencies]
 advent_2023_common = {path = "../advent_2023_common"}
-gcd = "2.3.0"
 nom = "7.1.3"
