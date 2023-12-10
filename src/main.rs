@@ -27,10 +27,17 @@ struct Cli {
 #[derive(Subcommand, Debug, Eq, PartialEq, Clone)]
 enum Commands {
     /// Run every solution
-    All,
+    All(AllArgs),
 
     /// Run a specific day
     Day(DayArgs),
+}
+
+#[derive(Args, Debug, Eq, PartialEq, Clone)]
+struct AllArgs {
+    /// If set, use input present in the inputs directory
+    #[arg(short, long, default_value_t = false)]
+    pub use_real_input: bool,
 }
 
 #[derive(Args, Debug, Eq, PartialEq, Clone)]
@@ -40,14 +47,6 @@ struct DayArgs {
 
     /// File to parse
     pub path: PathBuf,
-}
-
-fn run_all(solutions: &mut Vec<Box<dyn AdventSolution>>) {
-    for (i, solution) in solutions.iter_mut().enumerate() {
-        let input = fs::read_to_string(format!("inputs/day{:0>2}", i + 1)).unwrap();
-
-        run_day(i, solution, input);
-    }
 }
 
 fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) {
@@ -103,8 +102,16 @@ fn main() {
     let arguments = Cli::parse();
 
     match arguments.command {
-        Commands::All => {
-            run_all(&mut solutions);
+        Commands::All(all_args) => {
+            for (i, solution) in solutions.iter_mut().enumerate() {
+                let input = if all_args.use_real_input {
+                    fs::read_to_string(format!("inputs/day{:0>2}", i + 1)).unwrap()
+                } else {
+                    fs::read_to_string(format!("input_examples/day{:0>2}", i + 1)).unwrap()
+                };
+
+                run_day(i, solution, input);
+            }
         }
         Commands::Day(day_args) => {
             let input = fs::read_to_string(day_args.path).unwrap();
