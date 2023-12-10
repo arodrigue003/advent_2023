@@ -38,26 +38,6 @@ impl Tile {
             Tile::Start => unreachable!(),
         }
     }
-
-    /// Return true if a tile at the left of the current one is connected to us or not
-    pub fn is_connected(&self, left: Tile, start_tile: Tile) -> bool {
-        let current_tile = if self == &Tile::Start {
-            start_tile
-        } else {
-            *self
-        };
-
-        match current_tile {
-            Tile::Ground => false,
-            Tile::Vertical => false,
-            Tile::Horizontal => left.is_pointing(Direction::East, start_tile),
-            Tile::TopLeft => false,
-            Tile::TopRight => left.is_pointing(Direction::East, start_tile),
-            Tile::BottomLeft => false,
-            Tile::BottomRight => left.is_pointing(Direction::East, start_tile),
-            Tile::Start => unreachable!(),
-        }
-    }
 }
 
 impl From<(Direction, Direction)> for Tile {

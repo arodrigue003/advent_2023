@@ -1,7 +1,7 @@
 use std::fs;
 
 use advent_2023_common::get_args;
-use day10::models::{Direction, Grid, Point, Tile};
+use day10::models::{Direction, Grid, Point};
 use day10::parser::parse_data;
 
 fn solve_part_one(data: &Grid) -> usize {
@@ -13,88 +13,24 @@ fn solve_part_two(data: &Grid) -> i64 {
 
     let mut inner_count = 0;
     for (i_line, line) in data.tiles.iter().enumerate() {
-        let mut is_inside = false;
-        let mut start_is_pointing_north = false;
-        let mut start_is_pointing_south = false;
-        let mut end_is_pointing_north = false;
-        let mut end_is_pointing_south = false;
+        let mut pointing_north = 0;
+        let mut pointing_south = 0;
+
         for (i_column, tile) in line.iter().enumerate().skip(1) {
             let position = Point::new(i_line, i_column);
 
             if pipe_loop.loop_elements.contains(&position) {
-                let left = data.tiles[i_line][i_column - 1];
-
-                let is_connected = tile.is_connected(left, pipe_loop.start_tile);
-
-                // Check where the tile is pointing
-                let is_pointing_north = tile.is_pointing(Direction::North, pipe_loop.start_tile);
-                let is_pointing_south = tile.is_pointing(Direction::South, pipe_loop.start_tile);
-
-                // If is_connected is false and left is part of a loop, we started a new loop
-                // segment, update inside depending of the start and end direction
-                if left != Tile::Ground && !is_connected {
-                    #[allow(clippy::nonminimal_bool)]
-                    if start_is_pointing_north && start_is_pointing_south
-                        || (start_is_pointing_north && end_is_pointing_south)
-                        || (start_is_pointing_south && end_is_pointing_north)
-                    {
-                        // start was a vertical pipe or start and end come from a different direction
-                        // Update is_inside and start direction
-                        is_inside = !is_inside;
-                    }
-
-                    // Update the start since we moved out of next segment
-                    start_is_pointing_north = is_pointing_north;
-                    start_is_pointing_south = is_pointing_south;
+                if tile.is_pointing(Direction::North, pipe_loop.start_tile) {
+                    pointing_north += 1;
                 }
-
-                // Update end direction
-                end_is_pointing_south = is_pointing_south;
-                end_is_pointing_north = is_pointing_north;
-
-                if left == Tile::Ground {
-                    // Update the start id needed
-                    start_is_pointing_north = is_pointing_north;
-                    start_is_pointing_south = is_pointing_south;
+                if tile.is_pointing(Direction::South, pipe_loop.start_tile) {
+                    pointing_south += 1;
                 }
             } else {
-                // If left was part of the loop, update the is_inside part.
-                if pipe_loop
-                    .loop_elements
-                    .contains(&Point::new(i_line, i_column - 1))
-                {
-                    #[allow(clippy::nonminimal_bool)]
-                    if start_is_pointing_north && start_is_pointing_south
-                        || (start_is_pointing_north && end_is_pointing_south)
-                        || (start_is_pointing_south && end_is_pointing_north)
-                    {
-                        is_inside = !is_inside;
-                    }
-
-                    // Reset the start end end pointing
-                    start_is_pointing_south = false;
-                    start_is_pointing_north = false;
-                    end_is_pointing_south = false;
-                    end_is_pointing_north = false;
-                }
-
-                if is_inside {
-                    // println!("{} is inside", position);
+                if pointing_north % 2 == 1 && pointing_south % 2 == 1 {
                     inner_count += 1;
                 }
             }
-
-            // println!(
-            //     "position:({},{}), tile:{}, start:({},{}), end:({},{}); is_inside:{}",
-            //     i_line,
-            //     i_column,
-            //     tile,
-            //     start_is_pointing_north,
-            //     start_is_pointing_south,
-            //     end_is_pointing_north,
-            //     end_is_pointing_south,
-            //     is_inside
-            // );
         }
     }
 
