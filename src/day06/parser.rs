@@ -1,6 +1,5 @@
 use std::str::FromStr;
 
-use crate::day06::models::{Race, Races};
 use nom::bytes::complete::tag;
 use nom::character::complete::{digit1, line_ending, space1};
 use nom::combinator::{map, map_res, opt};
@@ -8,6 +7,8 @@ use nom::multi::separated_list1;
 use nom::sequence::{delimited, tuple};
 use nom::IResult;
 use nom::Parser;
+
+use crate::day06::models::{Race, Races};
 
 fn parse_times(input: &str) -> IResult<&str, Vec<i64>> {
     map_res(

@@ -1,5 +1,6 @@
-use crate::day03::models::{Schematic, SchematicCell};
 use std::collections::HashMap;
+
+use crate::day03::models::{Schematic, SchematicCell};
 
 pub fn solve_part_one(data: &Schematic) -> u32 {
     data.engine_parts

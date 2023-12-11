@@ -1,7 +1,6 @@
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-use crate::day05::models::{Almanac, Mapping};
 use nom::bytes::complete::{tag, take_until};
 use nom::character::complete::{digit1, line_ending, space1};
 use nom::combinator::{map, map_res};
@@ -9,6 +8,8 @@ use nom::multi::{many0, many1, separated_list1};
 use nom::sequence::{delimited, tuple};
 use nom::IResult;
 use nom::Parser;
+
+use crate::day05::models::{Almanac, Mapping};
 
 fn parse_seeds(input: &str) -> IResult<&str, Vec<i64>> {
     map_res(

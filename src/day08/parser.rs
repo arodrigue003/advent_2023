@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use crate::day08::models::{Direction, NavigationMap, Node};
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha1, alphanumeric1, line_ending};
 use nom::combinator::{map, opt};
@@ -8,6 +7,8 @@ use nom::multi::many1;
 use nom::sequence::{terminated, tuple};
 use nom::IResult;
 use nom::Parser;
+
+use crate::day08::models::{Direction, NavigationMap, Node};
 
 fn parse_directions(input: &str) -> IResult<&str, Vec<Direction>> {
     map(

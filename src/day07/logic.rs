@@ -1,5 +1,6 @@
-use crate::day07::models::{Hand, HandType};
 use std::collections::HashMap;
+
+use crate::day07::models::{Hand, HandType};
 
 fn get_type_from_cards(cards: &[u8]) -> HandType {
     let mut cards_set: HashMap<u8, u8> = HashMap::new();

@@ -1,4 +1,3 @@
-use crate::day02::models::{Game, GameSubset};
 use std::num::ParseIntError;
 use std::str::FromStr;
 
@@ -9,6 +8,8 @@ use nom::combinator::{map, map_res, opt};
 use nom::multi::{many1, separated_list1};
 use nom::sequence::tuple;
 use nom::{IResult, Parser};
+
+use crate::day02::models::{Game, GameSubset};
 
 fn parse_cube(input: &str) -> IResult<&str, GameSubset> {
     map_res(

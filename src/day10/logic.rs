@@ -1,5 +1,6 @@
-use crate::day10::models::{Direction, Grid, PipeLoop, Point, Tile};
 use std::collections::HashSet;
+
+use crate::day10::models::{Direction, Grid, PipeLoop, Point, Tile};
 
 impl Tile {
     /// Return the output direction considering we entered the tile from the given direction

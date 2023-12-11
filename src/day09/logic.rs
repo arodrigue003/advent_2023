@@ -1,5 +1,6 @@
-use crate::day09::models::SensorReport;
 use itertools::Itertools;
+
+use crate::day09::models::SensorReport;
 
 fn generate_next_line(line: &[i64]) -> Vec<i64> {
     line.iter()

@@ -1,3 +1,7 @@
+use std::fs;
+use std::path::PathBuf;
+use std::time::Instant;
+
 use advent_2023::day01::Day01;
 use advent_2023::day02::Day02;
 use advent_2023::day03::Day03;
@@ -11,9 +15,8 @@ use advent_2023::day10::Day10;
 use advent_2023::day11::Day11;
 use advent_2023::models::AdventSolution;
 use clap::{Args, Parser, Subcommand};
-use std::fs;
-use std::path::PathBuf;
-use std::time::Instant;
+use comfy_table::presets::UTF8_FULL;
+use comfy_table::{Cell, ContentArrangement, Table};
 
 #[derive(Parser, Debug, Eq, PartialEq, Clone)]
 struct Cli {
@@ -50,7 +53,17 @@ struct DayArgs {
     pub path: PathBuf,
 }
 
-fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) {
+struct RunDaySolution {
+    day: usize,
+    part_01_sol: i128,
+    part_02_sol: i128,
+    parse_time: u128,
+    prep_time: u128,
+    part_01_time: u128,
+    part_02_time: u128,
+}
+
+fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) -> RunDaySolution {
     // Parse the data
     let now = Instant::now();
     solution.parse(input);
@@ -71,17 +84,19 @@ fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) {
     let part_02_sol = solution.solve_part_two();
     let part_02_time = now.elapsed().as_micros();
 
-    // Display the result
-    println!(
-        "Day {:0>2}, results: {:>14}, {:>14}, \
-            parse_time: {:>10} us, prep_time: {:>10} us, \
-            part_01_time: {:>10} us, part_02_time: {:>10} us",
-        day, part_01_sol, part_02_sol, parse_time, prep_time, part_01_time, part_02_time
-    );
+    RunDaySolution {
+        day,
+        part_01_sol,
+        part_02_sol,
+        parse_time,
+        prep_time,
+        part_01_time,
+        part_02_time,
+    }
 }
 
 fn main() {
-    let mut solutions: Vec<Box<dyn AdventSolution>> = vec![
+    let mut solvers: Vec<Box<dyn AdventSolution>> = vec![
         Box::new(Day01::new()),
         Box::new(Day02::new()),
         Box::new(Day03::new()),
@@ -99,19 +114,68 @@ fn main() {
 
     match arguments.command {
         Commands::All(all_args) => {
-            for (i, solution) in solutions.iter_mut().enumerate() {
+            let mut table = Table::new();
+            let mut total_time: u128 = 0;
+            table
+                .load_preset(UTF8_FULL)
+                .set_content_arrangement(ContentArrangement::Dynamic)
+                .set_header(vec![
+                    "Day",
+                    "Part 1 solution",
+                    "Part 2 solution",
+                    "Parse time",
+                    "Prep time",
+                    "Part 1 time",
+                    "Part 2 time",
+                    "Tot time",
+                ]);
+            for (i, solver) in solvers.iter_mut().enumerate() {
                 let input = if all_args.use_real_input {
                     fs::read_to_string(format!("inputs/day{:0>2}", i + 1)).unwrap()
                 } else {
                     fs::read_to_string(format!("input_examples/day{:0>2}", i + 1)).unwrap()
                 };
 
-                run_day(i + 1, solution, input);
+                let solution = run_day(i + 1, solver, input);
+                let day_time = solution.parse_time
+                    + solution.prep_time
+                    + solution.part_01_time
+                    + solution.part_02_time;
+                total_time += day_time;
+                table.add_row(vec![
+                    Cell::new(solution.day),
+                    Cell::new(solution.part_01_sol),
+                    Cell::new(solution.part_02_sol),
+                    Cell::new(solution.parse_time),
+                    Cell::new(solution.prep_time),
+                    Cell::new(solution.part_01_time),
+                    Cell::new(solution.part_02_time),
+                    Cell::new(day_time),
+                ]);
             }
+            println!("Advent of code 2023 solutions (every time is displayed in microseconds):");
+            println!("{table}");
+            println!(
+                "Total execution time (excluding file loading time): {total_time} microseconds"
+            );
         }
         Commands::Day(day_args) => {
             let input = fs::read_to_string(day_args.path).unwrap();
-            run_day(day_args.day, &mut solutions[day_args.day - 1], input);
+            let solution = run_day(day_args.day, &mut solvers[day_args.day - 1], input);
+
+            // Display the result
+            println!(
+                "Day {:0>2}, results: {:>14}, {:>14}, \
+                parse_time: {:>10} us, prep_time: {:>10} us, \
+                part_01_time: {:>10} us, part_02_time: {:>10} us",
+                solution.day,
+                solution.part_01_sol,
+                solution.part_02_sol,
+                solution.parse_time,
+                solution.prep_time,
+                solution.part_01_time,
+                solution.part_02_time
+            );
         }
     }
 }

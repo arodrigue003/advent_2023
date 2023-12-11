@@ -1,5 +1,6 @@
-use crate::day08::models::{Direction, NavigationMap};
 use std::collections::HashMap;
+
+use crate::day08::models::{Direction, NavigationMap};
 
 /// Implementation of the extended euclidean algorithm
 /// This is taken from https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm

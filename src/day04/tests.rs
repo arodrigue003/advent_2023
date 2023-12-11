@@ -1,8 +1,9 @@
+use std::collections::HashSet;
+
 use crate::common::{test_part_one_common, test_part_two_common};
 use crate::day04::models::Game;
 use crate::day04::parser::parse_input;
 use crate::day04::Day04;
-use std::collections::HashSet;
 
 static INPUT_EXAMPLE: &str = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19

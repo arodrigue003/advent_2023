@@ -1,7 +1,6 @@
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-use crate::day04::models::Game;
 use nom::bytes::complete::tag;
 use nom::character::complete::{digit1, line_ending, space1};
 use nom::combinator::{map_res, opt};
@@ -9,6 +8,8 @@ use nom::multi::{many1, separated_list1};
 use nom::sequence::tuple;
 use nom::IResult;
 use nom::Parser;
+
+use crate::day04::models::Game;
 
 fn parse_game(input: &str) -> IResult<&str, Game> {
     map_res(

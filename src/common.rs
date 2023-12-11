@@ -1,7 +1,9 @@
-use crate::models::AdventSolution;
-use clap::Parser;
 use std::fmt::Debug;
 use std::path::PathBuf;
+
+use clap::Parser;
+
+use crate::models::AdventSolution;
 
 #[derive(Parser, Debug, Eq, PartialEq, Clone)]
 pub struct Cli {

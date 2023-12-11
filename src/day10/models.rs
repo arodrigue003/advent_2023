@@ -1,6 +1,7 @@
-use colored::Colorize;
 use std::collections::HashSet;
 use std::fmt::{Display, Formatter};
+
+use colored::Colorize;
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy)]
 pub enum Tile {

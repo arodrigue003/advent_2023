@@ -1,5 +1,6 @@
-use crate::day03::models::{EnginePart, Schematic, SchematicCell};
 use itertools::Itertools;
+
+use crate::day03::models::{EnginePart, Schematic, SchematicCell};
 
 static ZERO_VALUE: u8 = b'0';
 

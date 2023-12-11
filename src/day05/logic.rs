@@ -1,6 +1,7 @@
-use crate::day05::models::{Almanac, Mapping, Range};
 use itertools::FoldWhile::{Continue, Done};
 use itertools::Itertools;
+
+use crate::day05::models::{Almanac, Mapping, Range};
 
 fn map_range_inner(range: Range, mappings: &[Mapping]) -> Vec<Range> {
     let mut res = vec![];
