@@ -8,6 +8,7 @@ use advent_2023::day07::Day07;
 use advent_2023::day08::Day08;
 use advent_2023::day09::Day09;
 use advent_2023::day10::Day10;
+use advent_2023::day11::Day11;
 use advent_2023::models::AdventSolution;
 use clap::{Args, Parser, Subcommand};
 use std::fs;
@@ -75,13 +76,7 @@ fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) {
         "Day {:0>2}, results: {:>14}, {:>14}, \
             parse_time: {:>10} us, prep_time: {:>10} us, \
             part_01_time: {:>10} us, part_02_time: {:>10} us",
-        day + 1,
-        part_01_sol,
-        part_02_sol,
-        parse_time,
-        prep_time,
-        part_01_time,
-        part_02_time
+        day, part_01_sol, part_02_sol, parse_time, prep_time, part_01_time, part_02_time
     );
 }
 
@@ -97,6 +92,7 @@ fn main() {
         Box::new(Day08::new()),
         Box::new(Day09::new()),
         Box::new(Day10::new()),
+        Box::new(Day11::new()),
     ];
 
     let arguments = Cli::parse();
@@ -110,7 +106,7 @@ fn main() {
                     fs::read_to_string(format!("input_examples/day{:0>2}", i + 1)).unwrap()
                 };
 
-                run_day(i, solution, input);
+                run_day(i + 1, solution, input);
             }
         }
         Commands::Day(day_args) => {
