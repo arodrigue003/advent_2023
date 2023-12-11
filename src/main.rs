@@ -14,6 +14,7 @@ use advent_2023::day09::Day09;
 use advent_2023::day10::Day10;
 use advent_2023::day11::Day11;
 use advent_2023::models::AdventSolution;
+
 use clap::{Args, Parser, Subcommand};
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::{Cell, ContentArrangement, Table};
@@ -97,17 +98,17 @@ fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) ->
 
 fn main() {
     let mut solvers: Vec<Box<dyn AdventSolution>> = vec![
-        Box::new(Day01::new()),
-        Box::new(Day02::new()),
-        Box::new(Day03::new()),
-        Box::new(Day04::new()),
-        Box::new(Day05::new()),
-        Box::new(Day06::new()),
-        Box::new(Day07::new()),
-        Box::new(Day08::new()),
-        Box::new(Day09::new()),
-        Box::new(Day10::new()),
-        Box::new(Day11::new()),
+        Box::new(Day01::default()),
+        Box::new(Day02::default()),
+        Box::new(Day03::default()),
+        Box::new(Day04::default()),
+        Box::new(Day05::default()),
+        Box::new(Day06::default()),
+        Box::new(Day07::default()),
+        Box::new(Day08::default()),
+        Box::new(Day09::default()),
+        Box::new(Day10::default()),
+        Box::new(Day11::default()),
     ];
 
     let arguments = Cli::parse();

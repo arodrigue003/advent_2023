@@ -10,14 +10,9 @@ use crate::day07::models::Hand;
 use crate::day07::parser::parse_input;
 use crate::models::AdventSolution;
 
+#[derive(Default)]
 pub struct Day07 {
     parsed_data: Option<Vec<Hand>>,
-}
-
-impl Day07 {
-    pub fn new() -> Self {
-        Self { parsed_data: None }
-    }
 }
 
 impl AdventSolution for Day07 {
@@ -26,10 +21,10 @@ impl AdventSolution for Day07 {
     }
 
     fn solve_part_one(&self) -> i128 {
-        solve_part_one(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_one(self.parsed_data.as_ref().unwrap()) as i128
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_two(self.parsed_data.as_ref().unwrap()) as i128
     }
 }

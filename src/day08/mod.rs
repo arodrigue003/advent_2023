@@ -10,14 +10,9 @@ use crate::day08::models::NavigationMap;
 use crate::day08::parser::parse_input;
 use crate::models::AdventSolution;
 
+#[derive(Default)]
 pub struct Day08 {
     parsed_data: Option<NavigationMap>,
-}
-
-impl Day08 {
-    pub fn new() -> Self {
-        Self { parsed_data: None }
-    }
 }
 
 impl AdventSolution for Day08 {
@@ -26,10 +21,10 @@ impl AdventSolution for Day08 {
     }
 
     fn solve_part_one(&self) -> i128 {
-        solve_part_one(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_one(self.parsed_data.as_ref().unwrap()) as i128
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_two(self.parsed_data.as_ref().unwrap())
     }
 }

@@ -18,10 +18,10 @@ zoneight234
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day01::new(), INPUT_EXAMPLE_1, 142);
+    test_part_one_common(Day01::default(), INPUT_EXAMPLE_1, 142);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day01::new(), INPUT_EXAMPLE_2, 281);
+    test_part_two_common(Day01::default(), INPUT_EXAMPLE_2, 281);
 }

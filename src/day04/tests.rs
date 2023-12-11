@@ -27,10 +27,10 @@ fn test_parse_data() {
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day04::new(), INPUT_EXAMPLE, 13);
+    test_part_one_common(Day04::default(), INPUT_EXAMPLE, 13);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day04::new(), INPUT_EXAMPLE, 30);
+    test_part_two_common(Day04::default(), INPUT_EXAMPLE, 30);
 }

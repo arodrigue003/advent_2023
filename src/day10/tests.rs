@@ -41,13 +41,13 @@ L7JLJL-JLJLJL--JLJ.L";
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day10::new(), INPUT_EXAMPLE_1, 8);
+    test_part_one_common(Day10::default(), INPUT_EXAMPLE_1, 8);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day10::new(), INPUT_EXAMPLE_1, 1);
-    test_part_two_common(Day10::new(), INPUT_EXAMPLE_2, 4);
-    test_part_two_common(Day10::new(), INPUT_EXAMPLE_3, 8);
-    test_part_two_common(Day10::new(), INPUT_EXAMPLE_4, 10);
+    test_part_two_common(Day10::default(), INPUT_EXAMPLE_1, 1);
+    test_part_two_common(Day10::default(), INPUT_EXAMPLE_2, 4);
+    test_part_two_common(Day10::default(), INPUT_EXAMPLE_3, 8);
+    test_part_two_common(Day10::default(), INPUT_EXAMPLE_4, 10);
 }

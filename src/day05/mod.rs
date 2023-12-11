@@ -10,14 +10,9 @@ use crate::day05::models::Almanac;
 use crate::day05::parser::parse_input;
 use crate::models::AdventSolution;
 
+#[derive(Default)]
 pub struct Day05 {
     parsed_data: Option<Almanac>,
-}
-
-impl Day05 {
-    pub fn new() -> Self {
-        Self { parsed_data: None }
-    }
 }
 
 impl AdventSolution for Day05 {
@@ -26,10 +21,10 @@ impl AdventSolution for Day05 {
     }
 
     fn solve_part_one(&self) -> i128 {
-        solve_part_one(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_one(self.parsed_data.as_ref().unwrap()) as i128
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_two(self.parsed_data.as_ref().unwrap()) as i128
     }
 }

@@ -128,10 +128,8 @@ pub fn solve_part_two(data: &Grid, pipe_loop: &PipeLoop) -> i64 {
                 if tile.is_pointing(Direction::South, pipe_loop.start_tile) {
                     pointing_south += 1;
                 }
-            } else {
-                if pointing_north % 2 == 1 && pointing_south % 2 == 1 {
-                    inner_count += 1;
-                }
+            } else if pointing_north % 2 == 1 && pointing_south % 2 == 1 {
+                inner_count += 1;
             }
         }
     }

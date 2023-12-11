@@ -10,14 +10,9 @@ use crate::day06::models::Races;
 use crate::day06::parser::parse_input;
 use crate::models::AdventSolution;
 
+#[derive(Default)]
 pub struct Day06 {
     parsed_data: Option<Races>,
-}
-
-impl Day06 {
-    pub fn new() -> Self {
-        Self { parsed_data: None }
-    }
 }
 
 impl AdventSolution for Day06 {
@@ -26,10 +21,10 @@ impl AdventSolution for Day06 {
     }
 
     fn solve_part_one(&self) -> i128 {
-        solve_part_one(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_one(self.parsed_data.as_ref().unwrap()) as i128
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_two(self.parsed_data.as_ref().unwrap()) as i128
     }
 }

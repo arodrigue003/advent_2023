@@ -10,14 +10,9 @@ use crate::day02::models::Game;
 use crate::day02::parser::parse_input;
 use crate::models::AdventSolution;
 
+#[derive(Default)]
 pub struct Day02 {
     parsed_data: Option<Vec<Game>>,
-}
-
-impl Day02 {
-    pub fn new() -> Self {
-        Self { parsed_data: None }
-    }
 }
 
 impl AdventSolution for Day02 {
@@ -26,10 +21,10 @@ impl AdventSolution for Day02 {
     }
 
     fn solve_part_one(&self) -> i128 {
-        solve_part_one(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_one(self.parsed_data.as_ref().unwrap()) as i128
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(&self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_two(self.parsed_data.as_ref().unwrap()) as i128
     }
 }

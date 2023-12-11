@@ -29,10 +29,10 @@ ZZZ = (11B, 11B)
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day08::new(), INPUT_EXAMPLE_1, 6);
+    test_part_one_common(Day08::default(), INPUT_EXAMPLE_1, 6);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day08::new(), INPUT_EXAMPLE_2, 45);
+    test_part_two_common(Day08::default(), INPUT_EXAMPLE_2, 45);
 }

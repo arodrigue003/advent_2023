@@ -10,10 +10,10 @@ QQQJA 483
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day07::new(), INPUT_EXAMPLE, 6440);
+    test_part_one_common(Day07::default(), INPUT_EXAMPLE, 6440);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day07::new(), INPUT_EXAMPLE, 5905);
+    test_part_two_common(Day07::default(), INPUT_EXAMPLE, 5905);
 }

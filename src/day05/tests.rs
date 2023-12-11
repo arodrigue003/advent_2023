@@ -83,10 +83,10 @@ fn test_parse_data() {
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day05::new(), INPUT_EXAMPLE, 35);
+    test_part_one_common(Day05::default(), INPUT_EXAMPLE, 35);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day05::new(), INPUT_EXAMPLE, 46);
+    test_part_two_common(Day05::default(), INPUT_EXAMPLE, 46);
 }

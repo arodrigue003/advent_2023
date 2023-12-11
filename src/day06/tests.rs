@@ -7,10 +7,10 @@ Distance:  9  40  200
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day06::new(), INPUT_EXAMPLE, 288);
+    test_part_one_common(Day06::default(), INPUT_EXAMPLE, 288);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day06::new(), INPUT_EXAMPLE, 71503);
+    test_part_two_common(Day06::default(), INPUT_EXAMPLE, 71503);
 }

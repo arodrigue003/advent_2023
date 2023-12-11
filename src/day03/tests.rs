@@ -15,10 +15,10 @@ static INPUT_EXAMPLE: &str = "467..114..
 
 #[test]
 fn test_part_one() {
-    test_part_one_common(Day03::new(), INPUT_EXAMPLE, 4361);
+    test_part_one_common(Day03::default(), INPUT_EXAMPLE, 4361);
 }
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day03::new(), INPUT_EXAMPLE, 467835);
+    test_part_two_common(Day03::default(), INPUT_EXAMPLE, 467835);
 }
