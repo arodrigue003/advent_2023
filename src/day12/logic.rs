@@ -1,22 +1,24 @@
 use crate::day12::models::{ConditionRecord, SpringStatus};
+use std::collections::HashMap;
 
 fn get_combination_count(
+    memory: &mut HashMap<(usize, usize), usize>,
     condition_record: &ConditionRecord,
     status_pos: usize,
     group_pos: usize,
 ) -> usize {
-    // println!("{status_pos}, {group_pos}",);
+    if let Some(res) = memory.get(&(status_pos, group_pos)) {
+        return *res;
+    }
 
-    if status_pos >= condition_record.spring_status.len() {
+    let res = if status_pos >= condition_record.spring_status.len() {
         // End condition
         if group_pos >= condition_record.spring_groups.len() {
             // We were able to reach the end of both our input
-            // println!("exit 1");
             1
         } else {
             // We reached the end of the shapes but we were not able to get an through the end
             // of the groups
-            // println!("exit 2");
             0
         }
     } else {
@@ -25,22 +27,18 @@ fn get_combination_count(
             // We already exhausted our group options, either we have a case we can ignore or
             // the combination is invalid
             if condition_record.spring_status[status_pos] == SpringStatus::Damaged {
-                // println!("exit 3");
                 0
             } else {
-                // println!("exit 4");
-                get_combination_count(condition_record, status_pos + 1, group_pos)
+                get_combination_count(memory, condition_record, status_pos + 1, group_pos)
             }
         } else {
-            // println!("exit 5");
             // We try to get further in the computation depending on the tile status
             let mut res = 0;
             let group_len = condition_record.spring_groups[group_pos];
 
             if condition_record.spring_status[status_pos] != SpringStatus::Damaged {
                 // We can try to skip this tile
-                // println!("Sub1");
-                res += get_combination_count(condition_record, status_pos + 1, group_pos)
+                res += get_combination_count(memory, condition_record, status_pos + 1, group_pos)
             }
 
             if (status_pos + group_len) <= condition_record.spring_status.len()
@@ -52,8 +50,8 @@ fn get_combination_count(
                         != SpringStatus::Damaged)
             {
                 // We can move a shape forward
-                // println!("Sub2");
                 res += get_combination_count(
+                    memory,
                     condition_record,
                     status_pos + group_len + 1,
                     group_pos + 1,
@@ -62,16 +60,61 @@ fn get_combination_count(
 
             res
         }
-    }
+    };
+
+    memory.insert((status_pos, group_pos), res);
+
+    res
 }
 
 pub fn solve_part_one(conditions_records: &[ConditionRecord]) -> usize {
     conditions_records
         .iter()
-        .map(|record| get_combination_count(record, 0, 0))
+        .map(|record| {
+            let mut memory = HashMap::new();
+            let res = get_combination_count(&mut memory, record, 0, 0);
+            res
+        })
         .sum()
 }
 
-pub fn solve_part_two(_data: &[ConditionRecord]) -> u32 {
-    0
+pub fn solve_part_two(conditions_records: &[ConditionRecord]) -> usize {
+    // Clone condition records
+    let mut conditions_records = conditions_records.to_vec();
+    for condition_record in &mut conditions_records {
+        // Expand the status
+        condition_record.spring_status = condition_record
+            .spring_status
+            .clone()
+            .into_iter()
+            .chain(std::iter::once(SpringStatus::Unknown))
+            .chain(condition_record.spring_status.clone())
+            .chain(std::iter::once(SpringStatus::Unknown))
+            .chain(condition_record.spring_status.clone())
+            .chain(std::iter::once(SpringStatus::Unknown))
+            .chain(condition_record.spring_status.clone())
+            .chain(std::iter::once(SpringStatus::Unknown))
+            .chain(condition_record.spring_status.clone())
+            .collect();
+
+        // Expend the groups
+        condition_record.spring_groups = condition_record
+            .spring_groups
+            .clone()
+            .into_iter()
+            .chain(condition_record.spring_groups.clone())
+            .chain(condition_record.spring_groups.clone())
+            .chain(condition_record.spring_groups.clone())
+            .chain(condition_record.spring_groups.clone())
+            .collect();
+    }
+
+    conditions_records
+        .iter()
+        .map(|record| {
+            let mut memory = HashMap::new();
+            let res = get_combination_count(&mut memory, record, 0, 0);
+            res
+        })
+        .sum()
 }
