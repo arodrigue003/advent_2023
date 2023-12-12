@@ -30,7 +30,7 @@ fn parse_condition_record(input: &str) -> IResult<&str, ConditionRecord> {
                     .collect(),
                 spring_groups: spring_groups
                     .into_iter()
-                    .map(|group| usize::from_str(group))
+                    .map(usize::from_str)
                     .collect::<Result<Vec<_>, _>>()?,
             })
         },

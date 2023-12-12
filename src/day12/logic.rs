@@ -1,14 +1,13 @@
 use crate::day12::models::{ConditionRecord, SpringStatus};
-use std::collections::HashMap;
 
 fn get_combination_count(
-    memory: &mut HashMap<(usize, usize), usize>,
+    memory: &mut Vec<Vec<usize>>,
     condition_record: &ConditionRecord,
     status_pos: usize,
     group_pos: usize,
 ) -> usize {
-    if let Some(res) = memory.get(&(status_pos, group_pos)) {
-        return *res;
+    if memory[status_pos][group_pos] != usize::MAX {
+        return memory[status_pos][group_pos];
     }
 
     let res = if status_pos >= condition_record.spring_status.len() {
@@ -62,7 +61,7 @@ fn get_combination_count(
         }
     };
 
-    memory.insert((status_pos, group_pos), res);
+    memory[status_pos][group_pos] = res;
 
     res
 }
@@ -71,9 +70,12 @@ pub fn solve_part_one(conditions_records: &[ConditionRecord]) -> usize {
     conditions_records
         .iter()
         .map(|record| {
-            let mut memory = HashMap::new();
-            let res = get_combination_count(&mut memory, record, 0, 0);
-            res
+            let mut memory = vec![
+                vec![usize::MAX; record.spring_groups.len() + 2];
+                record.spring_status.len() + 2
+            ];
+
+            get_combination_count(&mut memory, record, 0, 0)
         })
         .sum()
 }
@@ -112,9 +114,12 @@ pub fn solve_part_two(conditions_records: &[ConditionRecord]) -> usize {
     conditions_records
         .iter()
         .map(|record| {
-            let mut memory = HashMap::new();
-            let res = get_combination_count(&mut memory, record, 0, 0);
-            res
+            let mut memory = vec![
+                vec![usize::MAX; record.spring_groups.len() + 2];
+                record.spring_status.len() + 2
+            ];
+
+            get_combination_count(&mut memory, record, 0, 0)
         })
         .sum()
 }

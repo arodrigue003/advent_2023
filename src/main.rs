@@ -99,18 +99,18 @@ fn run_day(day: usize, solution: &mut Box<dyn AdventSolution>, input: String) ->
 
 fn main() {
     let mut solvers: Vec<Box<dyn AdventSolution>> = vec![
-        Box::new(Day01::default()),
-        Box::new(Day02::default()),
-        Box::new(Day03::default()),
-        Box::new(Day04::default()),
-        Box::new(Day05::default()),
-        Box::new(Day06::default()),
-        Box::new(Day07::default()),
-        Box::new(Day08::default()),
-        Box::new(Day09::default()),
-        Box::new(Day10::default()),
-        Box::new(Day11::default()),
-        Box::new(Day12::default()),
+        Box::<Day01>::default(),
+        Box::<Day02>::default(),
+        Box::<Day03>::default(),
+        Box::<Day04>::default(),
+        Box::<Day05>::default(),
+        Box::<Day06>::default(),
+        Box::<Day07>::default(),
+        Box::<Day08>::default(),
+        Box::<Day09>::default(),
+        Box::<Day10>::default(),
+        Box::<Day11>::default(),
+        Box::<Day12>::default(),
     ];
 
     let arguments = Cli::parse();
