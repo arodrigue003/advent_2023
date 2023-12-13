@@ -1,4 +1,5 @@
 use crate::common::{test_part_one_common, test_part_two_common};
+use crate::day13::logic::find_mirrored_lines_part_one;
 use crate::day13::Day13;
 
 static INPUT_EXAMPLE: &str = "#.##..##.

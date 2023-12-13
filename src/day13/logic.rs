@@ -1,5 +1,37 @@
 use crate::day13::models::{Grid, Grid2, Tile};
 
+pub fn find_mirrored_lines_part_one(lines: &[u64], width: usize) -> Option<usize> {
+    let mut positions: u64 = (1 << width) - 1;
+
+    for line_int in lines {
+        if positions == 0 {
+            return None;
+        }
+
+        let reversed = line_int.reverse_bits();
+
+        positions = (1..width).fold(0, |acc, position| {
+            let pattern_width = std::cmp::min(position, width - position);
+
+            let res = if positions & (1 << (width - position - 1)) > 0 {
+                let right = line_int << 64 - width + position >> 64 - pattern_width;
+                let left = reversed << width - position >> 64 - pattern_width;
+                (left == right) as u64
+            } else {
+                0
+            };
+
+            (acc << 1) + res
+        });
+    }
+
+    if positions == 0 {
+        None
+    } else {
+        Some(width - positions.ilog2() as usize - 1)
+    }
+}
+
 fn find_mirrored_lines(lines: &[u64], width: usize) -> Option<usize> {
     let mut positions: u64 = (1 << width) - 1;
 
@@ -133,27 +165,13 @@ pub fn solve_part_one(data: &[Grid2]) -> usize {
 
 pub fn solve_part_one_2(data: &[Grid]) -> usize {
     data.iter()
-        .enumerate()
-        .filter_map(|(pos, grid)| {
-            let res = find_mirrored_lines(&grid.lines, grid.width);
-            if res != None {
-                println!("{pos}, {:?}", res);
-            };
-            res
-        })
+        .filter_map(|grid| find_mirrored_lines_part_one(&grid.lines, grid.width))
         .sum::<usize>()
-        + data
-            .iter()
-            .enumerate()
-            .filter_map(|(pos, grid)| {
-                let res = find_mirrored_lines(&grid.columns, grid.height);
-                if res != None {
-                    println!("{pos}, {:?}", res);
-                };
-                res
-            })
-            .map(|score| score * 100)
-            .sum::<usize>()
+        + 100
+            * data
+                .iter()
+                .filter_map(|grid| find_mirrored_lines_part_one(&grid.columns, grid.height))
+                .sum::<usize>()
 }
 
 pub fn solve_part_two(_data: &[Grid2]) -> u32 {
