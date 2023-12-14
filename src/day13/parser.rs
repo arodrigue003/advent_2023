@@ -30,7 +30,7 @@ pub fn parse_input(input: String) -> Vec<Grid> {
     let mut width: usize = 0;
 
     for line in input.lines() {
-        if line == "" {
+        if line.is_empty() {
             grids.push(Grid::new(last_grid, width));
             last_grid = vec![];
             width = 0;

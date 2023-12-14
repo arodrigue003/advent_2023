@@ -14,8 +14,8 @@ pub fn find_mirrored_lines(lines: &[u64], width: usize) -> Option<usize> {
             let pattern_width = std::cmp::min(position, width - position);
 
             let res = if positions & (1 << (width - position - 1)) > 0 {
-                let right = line_int << 64 - width + position >> 64 - pattern_width;
-                let left = reversed << width - position >> 64 - pattern_width;
+                let right = line_int << (64 - width + position) >> (64 - pattern_width);
+                let left = reversed << (width - position) >> (64 - pattern_width);
                 (left == right) as u64
             } else {
                 0
@@ -41,12 +41,10 @@ pub fn find_mirrored_lines_with_replacement(lines: &[u64], width: usize) -> Opti
         for i_column in 0..width {
             let mut positions: u64 = (1 << width) - 1;
 
-            for i_line_inner in 0..height {
+            for (i_line_inner, mut line_int) in lines.iter().cloned().enumerate() {
                 if positions == 0 {
                     break;
                 }
-
-                let mut line_int = lines[i_line_inner];
 
                 // If a replacement was selected, do it on the line.
                 if i_line_inner == i_line {
@@ -59,8 +57,8 @@ pub fn find_mirrored_lines_with_replacement(lines: &[u64], width: usize) -> Opti
                     let pattern_width = std::cmp::min(position, width - position);
 
                     let res = if positions & (1 << (width - position - 1)) > 0 {
-                        let right = line_int << 64 - width + position >> 64 - pattern_width;
-                        let left = reversed << width - position >> 64 - pattern_width;
+                        let right = line_int << (64 - width + position) >> (64 - pattern_width);
+                        let left = reversed << (width - position) >> (64 - pattern_width);
                         (left == right) as u64
                     } else {
                         0
