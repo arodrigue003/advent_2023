@@ -1,4 +1,4 @@
-use crate::day13::models::{Grid, Grid2, Tile};
+use crate::day13::models::Grid;
 
 impl Grid {
     pub fn new(lines: Vec<u64>, width: usize) -> Self {
@@ -13,13 +13,6 @@ impl Grid {
                 })
             })
             .collect();
-        //
-        // for column in &columns {
-        //     println!("{:#066b}", column);
-        // }
-        // println!("{}", columns.len());
-        // println!("{}", height);
-        // println!("{}", width);
 
         Self {
             lines,
@@ -30,7 +23,7 @@ impl Grid {
     }
 }
 
-pub fn parse_input_2(input: String) -> Vec<Grid> {
+pub fn parse_input(input: String) -> Vec<Grid> {
     let mut grids: Vec<Grid> = vec![];
 
     let mut last_grid = vec![];
@@ -54,34 +47,6 @@ pub fn parse_input_2(input: String) -> Vec<Grid> {
         }
     }
     grids.push(Grid::new(last_grid, width));
-
-    grids
-}
-
-pub fn parse_input(input: String) -> Vec<Grid2> {
-    let mut grids: Vec<Grid2> = vec![];
-
-    let mut last_grid: Vec<Vec<Tile>> = vec![];
-
-    for line in input.lines() {
-        if line == "" {
-            grids.push(Grid2 { grid: last_grid });
-            last_grid = vec![];
-        } else {
-            last_grid.push(
-                line.chars()
-                    .map(|char| match char {
-                        '.' => Tile::Ash,
-                        '#' => Tile::Rock,
-                        _ => unimplemented!(),
-                    })
-                    .collect(),
-            );
-        }
-    }
-    grids.push(Grid2 { grid: last_grid });
-
-    println!("{:?}", &grids);
 
     grids
 }

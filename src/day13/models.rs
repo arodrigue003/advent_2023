@@ -5,14 +5,3 @@ pub struct Grid {
     pub width: usize,
     pub height: usize,
 }
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum Tile {
-    Ash,
-    Rock,
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub struct Grid2 {
-    pub grid: Vec<Vec<Tile>>,
-}
