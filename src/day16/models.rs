@@ -1,11 +1,16 @@
 use std::fmt::{Display, Formatter};
 
-#[derive(Debug, Eq, PartialEq, Clone, Copy)]
-pub enum Direction {
-    Up,
-    Right,
-    Bot,
-    Left,
+use bitflags::bitflags;
+
+bitflags! {
+    #[repr(transparent)]
+    #[derive(Debug, Eq, PartialEq, Clone, Copy)]
+    pub struct Direction: u32 {
+        const Up = 0b00000001;
+        const Right = 0b00000010;
+        const Bot = 0b00000100;
+        const Left = 0b00001000;
+    }
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy)]
@@ -36,37 +41,30 @@ impl Display for TileContent {
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Tile {
     pub content: TileContent,
-    pub beams: [bool; 4],
+    pub beams: Direction,
 }
 
 impl Tile {
     pub fn new(content: TileContent) -> Self {
         Self {
             content,
-            beams: [false; 4],
+            beams: Direction::empty(),
         }
     }
 
+    #[inline(always)]
     pub fn contains_beam(&self, direction: Direction) -> bool {
-        match direction {
-            Direction::Up => self.beams[0],
-            Direction::Right => self.beams[1],
-            Direction::Bot => self.beams[2],
-            Direction::Left => self.beams[3],
-        }
+        self.beams.contains(direction)
     }
 
+    #[inline(always)]
     pub fn insert_beam(&mut self, direction: Direction) {
-        match direction {
-            Direction::Up => self.beams[0] = true,
-            Direction::Right => self.beams[1] = true,
-            Direction::Bot => self.beams[2] = true,
-            Direction::Left => self.beams[3] = true,
-        }
+        self.beams |= direction
     }
 
+    #[inline(always)]
     pub fn is_energized(&self) -> bool {
-        self.beams.iter().any(|value| *value)
+        !self.beams.is_empty()
     }
 }
 

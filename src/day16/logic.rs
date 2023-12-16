@@ -2,25 +2,26 @@ use crate::day16::models::{Contraption, Direction, Tile, TileContent};
 use std::cmp::max;
 
 impl Tile {
-    pub fn get_output_direction(&self, direction: Direction) -> Vec<Direction> {
+    pub fn get_output_direction(&self, direction: Direction) -> Direction {
         match (&self.content, direction) {
-            (TileContent::Empty, direction) => vec![direction],
-            (TileContent::Mirror, Direction::Right) => vec![Direction::Up],
-            (TileContent::Mirror, Direction::Bot) => vec![Direction::Left],
-            (TileContent::Mirror, Direction::Left) => vec![Direction::Bot],
-            (TileContent::Mirror, Direction::Up) => vec![Direction::Right],
-            (TileContent::AntiMirror, Direction::Right) => vec![Direction::Bot],
-            (TileContent::AntiMirror, Direction::Bot) => vec![Direction::Right],
-            (TileContent::AntiMirror, Direction::Left) => vec![Direction::Up],
-            (TileContent::AntiMirror, Direction::Up) => vec![Direction::Left],
-            (TileContent::HorizontalSplitter, Direction::Right) => vec![Direction::Right],
-            (TileContent::HorizontalSplitter, Direction::Left) => vec![Direction::Left],
-            (TileContent::HorizontalSplitter, Direction::Up) => vec![Direction::Left, Direction::Right],
-            (TileContent::HorizontalSplitter, Direction::Bot) => vec![Direction::Left, Direction::Right],
-            (TileContent::VerticalSplitter, Direction::Right) => vec![Direction::Up, Direction::Bot],
-            (TileContent::VerticalSplitter, Direction::Left) => vec![Direction::Up, Direction::Bot],
-            (TileContent::VerticalSplitter, Direction::Up) => vec![Direction::Up],
-            (TileContent::VerticalSplitter, Direction::Bot) => vec![Direction::Bot],
+            (TileContent::Empty, direction) => direction,
+            (TileContent::Mirror, Direction::Right) => Direction::Up,
+            (TileContent::Mirror, Direction::Bot) => Direction::Left,
+            (TileContent::Mirror, Direction::Left) => Direction::Bot,
+            (TileContent::Mirror, Direction::Up) => Direction::Right,
+            (TileContent::AntiMirror, Direction::Right) => Direction::Bot,
+            (TileContent::AntiMirror, Direction::Bot) => Direction::Right,
+            (TileContent::AntiMirror, Direction::Left) => Direction::Up,
+            (TileContent::AntiMirror, Direction::Up) => Direction::Left,
+            (TileContent::HorizontalSplitter, Direction::Right) => Direction::Right,
+            (TileContent::HorizontalSplitter, Direction::Left) => Direction::Left,
+            (TileContent::HorizontalSplitter, Direction::Up) => Direction::Left | Direction::Right,
+            (TileContent::HorizontalSplitter, Direction::Bot) => Direction::Left | Direction::Right,
+            (TileContent::VerticalSplitter, Direction::Right) => Direction::Up | Direction::Bot,
+            (TileContent::VerticalSplitter, Direction::Left) => Direction::Up | Direction::Bot,
+            (TileContent::VerticalSplitter, Direction::Up) => Direction::Up,
+            (TileContent::VerticalSplitter, Direction::Bot) => Direction::Bot,
+            _ => unreachable!(),
         }
     }
 }
@@ -57,6 +58,7 @@ fn make_beam_progress(contraption: &mut Contraption, line: usize, column: usize,
                     make_beam_progress(contraption, line, column - 1, Direction::Left)
                 }
             }
+            _ => unreachable!(),
         }
     }
 }
