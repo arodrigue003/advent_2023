@@ -76,7 +76,7 @@ impl Display for Tile {
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Contraption {
-    pub grid: Vec<Vec<Tile>>,
+    pub grid: Vec<Tile>,
     pub width: usize,
     pub height: usize,
 }
@@ -85,15 +85,25 @@ impl Contraption {
     pub fn new(grid: Vec<Vec<Tile>>) -> Self {
         let width = grid[0].len();
         let height = grid.len();
-        Self { grid, width, height }
+
+        Self {
+            grid: grid.into_iter().flat_map(|line| line.into_iter()).collect(),
+            width,
+            height,
+        }
+    }
+
+    #[inline(always)]
+    pub fn offset(&self, line: usize, column: usize) -> usize {
+        line * self.width + column
     }
 }
 
 impl Display for Contraption {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        for line in &self.grid {
-            for tile in line {
-                write!(f, "{}", tile)?;
+        for line in 0..self.height {
+            for column in 0..self.width {
+                write!(f, "{}", self.grid[self.offset(line, column)])?;
             }
             writeln!(f)?;
         }

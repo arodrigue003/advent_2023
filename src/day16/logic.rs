@@ -40,16 +40,18 @@ fn simulate_and_get_energized_tile_count(
     queue.push((line, column, direction));
 
     while let Some((line, column, direction)) = queue.pop() {
+        let offset = contraption.offset(line, column);
+
         // If the contraption already has a beam in the current tile, return early
-        if contraption.grid[line][column].contains_beam(direction) {
+        if contraption.grid[offset].contains_beam(direction) {
             continue;
         }
 
         // Update the current tile to add the beam
-        contraption.grid[line][column].insert_beam(direction);
+        contraption.grid[offset].insert_beam(direction);
 
         // Get output directions and make beam progress further
-        for direction in contraption.grid[line][column].get_output_direction(direction) {
+        for direction in contraption.grid[offset].get_output_direction(direction) {
             match direction {
                 Direction::Up => {
                     if line > 0 {
@@ -77,11 +79,7 @@ fn simulate_and_get_energized_tile_count(
     }
 
     // Compute the number of energized tiles
-    contraption
-        .grid
-        .iter()
-        .flat_map(|line| line.iter().map(|tile| tile.is_energized() as u32))
-        .sum()
+    contraption.grid.iter().map(|tile| tile.is_energized() as u32).sum()
 }
 
 pub fn solve_part_one(contraption: &Contraption) -> u32 {
