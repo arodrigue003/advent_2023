@@ -26,43 +26,6 @@ impl Tile {
     }
 }
 
-fn make_beam_progress(contraption: &mut Contraption, line: usize, column: usize, direction: Direction) {
-    // If the contraption already has a beam in the current tile, return early
-    if contraption.grid[line][column].contains_beam(direction) {
-        return;
-    }
-
-    // Update the current tile to add the beam
-    contraption.grid[line][column].insert_beam(direction);
-
-    // Get output directions and make beam progress further
-    for direction in contraption.grid[line][column].get_output_direction(direction) {
-        match direction {
-            Direction::Up => {
-                if line > 0 {
-                    make_beam_progress(contraption, line - 1, column, Direction::Up)
-                }
-            }
-            Direction::Right => {
-                if column + 1 < contraption.width {
-                    make_beam_progress(contraption, line, column + 1, Direction::Right)
-                }
-            }
-            Direction::Bot => {
-                if line + 1 < contraption.height {
-                    make_beam_progress(contraption, line + 1, column, Direction::Bot)
-                }
-            }
-            Direction::Left => {
-                if column > 0 {
-                    make_beam_progress(contraption, line, column - 1, Direction::Left)
-                }
-            }
-            _ => unreachable!(),
-        }
-    }
-}
-
 fn simulate_and_get_energized_tile_count(
     contraption: &Contraption,
     line: usize,
@@ -73,7 +36,45 @@ fn simulate_and_get_energized_tile_count(
     let mut contraption = contraption.clone();
 
     // Make beam progress
-    make_beam_progress(&mut contraption, line, column, direction);
+    let mut queue = vec![];
+    queue.push((line, column, direction));
+
+    while let Some((line, column, direction)) = queue.pop() {
+        // If the contraption already has a beam in the current tile, return early
+        if contraption.grid[line][column].contains_beam(direction) {
+            continue;
+        }
+
+        // Update the current tile to add the beam
+        contraption.grid[line][column].insert_beam(direction);
+
+        // Get output directions and make beam progress further
+        for direction in contraption.grid[line][column].get_output_direction(direction) {
+            match direction {
+                Direction::Up => {
+                    if line > 0 {
+                        queue.push((line - 1, column, Direction::Up))
+                    }
+                }
+                Direction::Right => {
+                    if column + 1 < contraption.width {
+                        queue.push((line, column + 1, Direction::Right))
+                    }
+                }
+                Direction::Bot => {
+                    if line + 1 < contraption.height {
+                        queue.push((line + 1, column, Direction::Bot))
+                    }
+                }
+                Direction::Left => {
+                    if column > 0 {
+                        queue.push((line, column - 1, Direction::Left))
+                    }
+                }
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // Compute the number of energized tiles
     contraption
