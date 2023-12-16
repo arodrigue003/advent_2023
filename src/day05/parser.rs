@@ -13,11 +13,7 @@ use crate::day05::models::{Almanac, Mapping};
 
 fn parse_seeds(input: &str) -> IResult<&str, Vec<i64>> {
     map_res(
-        delimited(
-            tag("seeds: "),
-            separated_list1(space1, digit1),
-            many1(line_ending),
-        ),
+        delimited(tag("seeds: "), separated_list1(space1, digit1), many1(line_ending)),
         |seeds| seeds.into_iter().map(i64::from_str).collect(),
     )
     .parse(input)
@@ -53,10 +49,9 @@ fn parse_mapping_group(input: &str) -> IResult<&str, Vec<Mapping>> {
 }
 
 fn parse_almanac(input: &str) -> IResult<&str, Almanac> {
-    map(
-        tuple((parse_seeds, many1(parse_mapping_group))),
-        |(seeds, mappings)| Almanac { seeds, mappings },
-    )
+    map(tuple((parse_seeds, many1(parse_mapping_group))), |(seeds, mappings)| {
+        Almanac { seeds, mappings }
+    })
     .parse(input)
 }
 

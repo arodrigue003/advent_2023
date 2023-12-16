@@ -22,11 +22,7 @@ impl Tile {
 
     /// Return true if the tile is pointing out to that direction.
     fn is_pointing(&self, direction: Direction, start_tile: Tile) -> bool {
-        let current_tile = if self == &Tile::Start {
-            start_tile
-        } else {
-            *self
-        };
+        let current_tile = if self == &Tile::Start { start_tile } else { *self };
 
         match current_tile {
             Tile::Ground => false,
@@ -63,12 +59,7 @@ impl From<(Direction, Direction)> for Tile {
 
 pub fn get_loop(grid: &Grid) -> PipeLoop {
     // Determinate the loop direction by starting every starting direction
-    for starting_direction in [
-        Direction::East,
-        Direction::South,
-        Direction::West,
-        Direction::North,
-    ] {
+    for starting_direction in [Direction::East, Direction::South, Direction::West, Direction::North] {
         let mut size = 0;
         let mut direction = starting_direction;
         let mut position = grid.start.clone();
@@ -97,11 +88,10 @@ pub fn get_loop(grid: &Grid) -> PipeLoop {
             }
 
             // Get the output direction
-            direction =
-                match grid.tiles[position.line][position.column].get_output_direction(direction) {
-                    None => break,
-                    Some(direction) => direction,
-                };
+            direction = match grid.tiles[position.line][position.column].get_output_direction(direction) {
+                None => break,
+                Some(direction) => direction,
+            };
         }
     }
 

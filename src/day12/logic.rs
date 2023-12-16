@@ -45,16 +45,10 @@ fn get_combination_count(
                     .iter()
                     .all(|tile| tile != &SpringStatus::Operational)
                 && (status_pos + group_len >= condition_record.spring_status.len()
-                    || condition_record.spring_status[status_pos + group_len]
-                        != SpringStatus::Damaged)
+                    || condition_record.spring_status[status_pos + group_len] != SpringStatus::Damaged)
             {
                 // We can move a shape forward
-                res += get_combination_count(
-                    memory,
-                    condition_record,
-                    status_pos + group_len + 1,
-                    group_pos + 1,
-                );
+                res += get_combination_count(memory, condition_record, status_pos + group_len + 1, group_pos + 1);
             }
 
             res
@@ -70,10 +64,7 @@ pub fn solve_part_one(conditions_records: &[ConditionRecord]) -> usize {
     conditions_records
         .iter()
         .map(|record| {
-            let mut memory = vec![
-                vec![usize::MAX; record.spring_groups.len() + 2];
-                record.spring_status.len() + 2
-            ];
+            let mut memory = vec![vec![usize::MAX; record.spring_groups.len() + 2]; record.spring_status.len() + 2];
 
             get_combination_count(&mut memory, record, 0, 0)
         })
@@ -114,10 +105,7 @@ pub fn solve_part_two(conditions_records: &[ConditionRecord]) -> usize {
     conditions_records
         .iter()
         .map(|record| {
-            let mut memory = vec![
-                vec![usize::MAX; record.spring_groups.len() + 2];
-                record.spring_status.len() + 2
-            ];
+            let mut memory = vec![vec![usize::MAX; record.spring_groups.len() + 2]; record.spring_status.len() + 2];
 
             get_combination_count(&mut memory, record, 0, 0)
         })

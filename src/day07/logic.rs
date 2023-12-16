@@ -58,11 +58,7 @@ pub fn solve_part_one(data: &[Hand]) -> usize {
     hands.sort_by_cached_key(|hand| (get_type(hand), hand.cards.clone()));
 
     // Compute the result
-    hands
-        .iter()
-        .enumerate()
-        .map(|(idx, hand)| (idx + 1) * hand.bid)
-        .sum()
+    hands.iter().enumerate().map(|(idx, hand)| (idx + 1) * hand.bid).sum()
 }
 
 pub fn solve_part_two(data: &[Hand]) -> usize {
@@ -82,9 +78,5 @@ pub fn solve_part_two(data: &[Hand]) -> usize {
     hands.sort_by_cached_key(|hand| (get_best_type(hand), hand.cards.clone()));
 
     // Compute the result
-    hands
-        .iter()
-        .enumerate()
-        .map(|(idx, hand)| (idx + 1) * hand.bid)
-        .sum()
+    hands.iter().enumerate().map(|(idx, hand)| (idx + 1) * hand.bid).sum()
 }

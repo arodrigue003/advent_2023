@@ -44,16 +44,15 @@ pub fn parse_input(input: String) -> Schematic {
                 .into_iter()
                 .filter(|(key, _)| *key)
                 .map(|(_, group)| {
-                    group.into_iter().fold(
-                        (usize::MAX, 0, 0),
-                        |(start, _end, value), (i_col, cell)| {
+                    group
+                        .into_iter()
+                        .fold((usize::MAX, 0, 0), |(start, _end, value), (i_col, cell)| {
                             let start = if start == usize::MAX { i_col } else { start };
                             match cell {
                                 SchematicCell::Part(x) => (start, i_col, value * 10 + (*x as u32)),
                                 _ => unreachable!(),
                             }
-                        },
-                    )
+                        })
                 })
                 .map(|(start, end, value)| EnginePart {
                     value,

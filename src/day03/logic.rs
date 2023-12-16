@@ -7,8 +7,7 @@ pub fn solve_part_one(data: &Schematic) -> u32 {
         .iter()
         .filter(|engine_part| {
             (engine_part.col_start - 1..=engine_part.col_end + 1).any(|i_col| {
-                data.grid[engine_part.line - 1][i_col].is_symbol()
-                    || data.grid[engine_part.line + 1][i_col].is_symbol()
+                data.grid[engine_part.line - 1][i_col].is_symbol() || data.grid[engine_part.line + 1][i_col].is_symbol()
             }) || data.grid[engine_part.line][engine_part.col_start - 1].is_symbol()
                 || data.grid[engine_part.line][engine_part.col_end + 1].is_symbol()
         })

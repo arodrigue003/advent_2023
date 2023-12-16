@@ -21,9 +21,7 @@ pub fn solve_part_one(data: &SensorReport) -> i64 {
             {
                 break;
             }
-            value_expansion.push(generate_next_line(
-                &value_expansion[value_expansion.len() - 1],
-            ))
+            value_expansion.push(generate_next_line(&value_expansion[value_expansion.len() - 1]))
         }
 
         let mut res = 0;
@@ -47,9 +45,7 @@ pub fn solve_part_two(data: &SensorReport) -> i64 {
             {
                 break;
             }
-            value_expansion.push(generate_next_line(
-                &value_expansion[value_expansion.len() - 1],
-            ))
+            value_expansion.push(generate_next_line(&value_expansion[value_expansion.len() - 1]))
         }
 
         let mut res = 0;

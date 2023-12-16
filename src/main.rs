@@ -13,12 +13,12 @@ use advent_2023::day08::Day08;
 use advent_2023::day09::Day09;
 use advent_2023::day10::Day10;
 use advent_2023::day11::Day11;
-use advent_2023::models::AdventSolution;
-
 use advent_2023::day12::Day12;
 use advent_2023::day13::Day13;
 use advent_2023::day14::Day14;
 use advent_2023::day15::Day15;
+use advent_2023::day16::Day16;
+use advent_2023::models::AdventSolution;
 use clap::{Args, Parser, Subcommand};
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::{Cell, ContentArrangement, Table};
@@ -117,6 +117,7 @@ fn main() {
         Box::<Day13>::default(),
         Box::<Day14>::default(),
         Box::<Day15>::default(),
+        Box::<Day16>::default(),
     ];
 
     let arguments = Cli::parse();
@@ -146,10 +147,7 @@ fn main() {
                 };
 
                 let solution = run_day(i + 1, solver, input);
-                let day_time = solution.parse_time
-                    + solution.prep_time
-                    + solution.part_01_time
-                    + solution.part_02_time;
+                let day_time = solution.parse_time + solution.prep_time + solution.part_01_time + solution.part_02_time;
                 total_time += day_time;
                 table.add_row(vec![
                     Cell::new(solution.day),
@@ -164,9 +162,7 @@ fn main() {
             }
             println!("Advent of code 2023 solutions (every time is displayed in microseconds):");
             println!("{table}");
-            println!(
-                "Total execution time (excluding file loading time): {total_time} microseconds"
-            );
+            println!("Total execution time (excluding file loading time): {total_time} microseconds");
         }
         Commands::Day(day_args) => {
             let input = fs::read_to_string(day_args.path).unwrap();

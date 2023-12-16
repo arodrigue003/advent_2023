@@ -1,4 +1,6 @@
-use crate::day15::models::{Action, Step};
+use std::num::ParseIntError;
+use std::str::FromStr;
+
 use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha1, digit1, line_ending};
@@ -6,8 +8,8 @@ use nom::combinator::{map, map_res, opt};
 use nom::multi::separated_list1;
 use nom::sequence::{terminated, tuple};
 use nom::{IResult, Parser};
-use std::num::ParseIntError;
-use std::str::FromStr;
+
+use crate::day15::models::{Action, Step};
 
 fn parse_remove(input: &str) -> IResult<&str, Action> {
     map(tag("-"), |_| Action::Remove).parse(input)

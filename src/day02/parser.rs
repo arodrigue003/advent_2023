@@ -28,10 +28,7 @@ fn parse_cube(input: &str) -> IResult<&str, GameSubset> {
 }
 
 fn parse_subset(input: &str) -> IResult<&str, GameSubset> {
-    map(separated_list1(tag(", "), parse_cube), |cubes| {
-        cubes.into_iter().sum()
-    })
-    .parse(input)
+    map(separated_list1(tag(", "), parse_cube), |cubes| cubes.into_iter().sum()).parse(input)
 }
 
 fn parse_subsets(input: &str) -> IResult<&str, Vec<GameSubset>> {
@@ -40,13 +37,7 @@ fn parse_subsets(input: &str) -> IResult<&str, Vec<GameSubset>> {
 
 fn parse_game(input: &str) -> IResult<&str, Game> {
     map_res(
-        tuple((
-            tag("Game "),
-            digit1,
-            tag(": "),
-            parse_subsets,
-            opt(line_ending),
-        )),
+        tuple((tag("Game "), digit1, tag(": "), parse_subsets, opt(line_ending))),
         |(_, index, _, subsets, _)| {
             Ok::<_, ParseIntError>(Game {
                 index: u32::from_str(index)?,

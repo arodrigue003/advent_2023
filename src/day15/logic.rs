@@ -1,15 +1,11 @@
 use crate::day15::models::{Action, BoxLens, Step};
 
 fn compute_string_hash(data: &str) -> usize {
-    data.chars()
-        .fold(0, |acc, char| (acc + char as usize) * 17 % 256)
+    data.chars().fold(0, |acc, char| (acc + char as usize) * 17 % 256)
 }
 
 pub fn solve_part_one(steps: &[Step]) -> usize {
-    steps
-        .iter()
-        .map(|step| compute_string_hash(&step.to_string()))
-        .sum()
+    steps.iter().map(|step| compute_string_hash(&step.to_string())).sum()
 }
 
 pub fn solve_part_two(steps: &[Step]) -> usize {
@@ -45,9 +41,7 @@ pub fn solve_part_two(steps: &[Step]) -> usize {
             lens_library
                 .iter()
                 .enumerate()
-                .map(move |(slot_number, box_lens)| {
-                    (1 + box_number) * (1 + slot_number) * box_lens.focal
-                })
+                .map(move |(slot_number, box_lens)| (1 + box_number) * (1 + slot_number) * box_lens.focal)
         })
         .sum()
 }

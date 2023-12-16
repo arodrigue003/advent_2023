@@ -15,12 +15,7 @@ pub fn solve_part_two(data: &[Game]) -> u32 {
     data.iter()
         .map(|game| {
             game.subsets.iter().map(|subset| subset.red).max().unwrap()
-                * game
-                    .subsets
-                    .iter()
-                    .map(|subset| subset.green)
-                    .max()
-                    .unwrap()
+                * game.subsets.iter().map(|subset| subset.green).max().unwrap()
                 * game.subsets.iter().map(|subset| subset.blue).max().unwrap()
         })
         .sum()

@@ -4,11 +4,7 @@ pub fn parse_input(input: String) -> SensorReport {
     SensorReport {
         values_history: input
             .lines()
-            .map(|line| {
-                line.split(' ')
-                    .map(|value| value.parse().unwrap())
-                    .collect()
-            })
+            .map(|line| line.split(' ').map(|value| value.parse().unwrap()).collect())
             .collect(),
     }
 }

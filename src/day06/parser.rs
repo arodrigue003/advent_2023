@@ -35,16 +35,13 @@ fn parse_distances(input: &str) -> IResult<&str, Vec<i64>> {
 }
 
 fn parse_races(input: &str) -> IResult<&str, Races> {
-    map(
-        tuple((parse_times, parse_distances)),
-        |(times, distances)| Races {
-            races: times
-                .into_iter()
-                .zip(distances)
-                .map(|(time, distance)| Race { time, distance })
-                .collect(),
-        },
-    )
+    map(tuple((parse_times, parse_distances)), |(times, distances)| Races {
+        races: times
+            .into_iter()
+            .zip(distances)
+            .map(|(time, distance)| Race { time, distance })
+            .collect(),
+    })
     .parse(input)
 }
 

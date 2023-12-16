@@ -73,8 +73,7 @@ pub fn prepare(data: &SkyMap) -> SparseSkyMap {
 
     for i_column_1 in 0..width {
         for i_column_2 in i_column_1..width {
-            empty_columns_count[i_column_2][i_column_1] =
-                empty_columns_count[i_column_1][i_column_2];
+            empty_columns_count[i_column_2][i_column_1] = empty_columns_count[i_column_1][i_column_2];
         }
     }
 

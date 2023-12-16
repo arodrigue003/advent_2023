@@ -30,9 +30,6 @@ impl AdventSolution for Day10 {
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(
-            self.parsed_data.as_ref().unwrap(),
-            self.prepared_data.as_ref().unwrap(),
-        ) as i128
+        solve_part_two(self.parsed_data.as_ref().unwrap(), self.prepared_data.as_ref().unwrap()) as i128
     }
 }

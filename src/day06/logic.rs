@@ -35,16 +35,15 @@ fn compute_higher(time: i64, distance: i64) -> i64 {
 pub fn solve_part_one(data: &Races) -> i64 {
     data.races
         .iter()
-        .map(|race| {
-            compute_higher(race.time, race.distance) - compute_lower(race.time, race.distance) + 1
-        })
+        .map(|race| compute_higher(race.time, race.distance) - compute_lower(race.time, race.distance) + 1)
         .product()
 }
 
 pub fn solve_part_two(data: &Races) -> i64 {
-    let time = data.races.iter().fold(0, |acc, race| {
-        acc * 10i64.pow(race.time.ilog10() + 1) + race.time
-    });
+    let time = data
+        .races
+        .iter()
+        .fold(0, |acc, race| acc * 10i64.pow(race.time.ilog10() + 1) + race.time);
     let distance = data.races.iter().fold(0, |acc, race| {
         acc * 10i64.pow(race.distance.ilog10() + 1) + race.distance
     });

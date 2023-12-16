@@ -15,11 +15,7 @@ impl Platform {
     pub fn new(grid: Vec<Vec<Tile>>) -> Self {
         let width = grid[0].len();
         let height = grid.len();
-        Self {
-            grid,
-            width,
-            height,
-        }
+        Self { grid, width, height }
     }
 }
 

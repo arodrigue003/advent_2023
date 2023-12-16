@@ -164,18 +164,10 @@ fn compute_periodicities(current: &usize, data: &NavigationMap) -> Vec<(i128, i1
 
 pub fn solve_part_one(data: &NavigationMap) -> u32 {
     // Detect the end position
-    let end = data
-        .nodes
-        .iter()
-        .position(|node| node.name.as_str() == "ZZZ")
-        .unwrap();
+    let end = data.nodes.iter().position(|node| node.name.as_str() == "ZZZ").unwrap();
 
     // At the beginning, the current position is at the start
-    let mut current = data
-        .nodes
-        .iter()
-        .position(|node| node.name.as_str() == "AAA")
-        .unwrap();
+    let mut current = data.nodes.iter().position(|node| node.name.as_str() == "AAA").unwrap();
 
     // Iterate over the instruction until we reach the end
     let mut steps = 0;
@@ -216,9 +208,9 @@ pub fn solve_part_two(data: &NavigationMap) -> i128 {
         .fold(vec![(0, 1)], |acc, periods| {
             acc.into_iter()
                 .flat_map(|(acc_offset, acc_period)| {
-                    periods.iter().filter_map(move |(offset, period)| {
-                        solve_periodicity(acc_offset, acc_period, *offset, *period)
-                    })
+                    periods
+                        .iter()
+                        .filter_map(move |(offset, period)| solve_periodicity(acc_offset, acc_period, *offset, *period))
                 })
                 .collect()
         })

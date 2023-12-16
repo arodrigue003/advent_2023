@@ -1,7 +1,8 @@
-use crate::day14::models::{Platform, Tile};
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
+
+use crate::day14::models::{Platform, Tile};
 
 static TARGET: usize = 1_000_000_000;
 
@@ -10,9 +11,7 @@ impl Platform {
         self.grid
             .iter()
             .enumerate()
-            .map(|(i_line, line)| {
-                (self.height - i_line) * line.iter().filter(|tile| **tile == Tile::Round).count()
-            })
+            .map(|(i_line, line)| (self.height - i_line) * line.iter().filter(|tile| **tile == Tile::Round).count())
             .sum()
     }
 

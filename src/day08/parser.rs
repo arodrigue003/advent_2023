@@ -11,19 +11,16 @@ use nom::Parser;
 use crate::day08::models::{Direction, NavigationMap, Node};
 
 fn parse_directions(input: &str) -> IResult<&str, Vec<Direction>> {
-    map(
-        terminated(alpha1, many1(line_ending)),
-        |directions: &str| {
-            directions
-                .chars()
-                .map(|char| match char {
-                    'L' => Direction::Left,
-                    'R' => Direction::Right,
-                    _ => unreachable!(),
-                })
-                .collect()
-        },
-    )
+    map(terminated(alpha1, many1(line_ending)), |directions: &str| {
+        directions
+            .chars()
+            .map(|char| match char {
+                'L' => Direction::Left,
+                'R' => Direction::Right,
+                _ => unreachable!(),
+            })
+            .collect()
+    })
     .parse(input)
 }
 
@@ -67,13 +64,9 @@ fn parse_nodes(input: &str) -> IResult<&str, Vec<Node>> {
 }
 
 fn parse_navigation_map(input: &str) -> IResult<&str, NavigationMap> {
-    map(
-        tuple((parse_directions, parse_nodes)),
-        |(instructions, nodes)| NavigationMap {
-            instructions,
-            nodes,
-        },
-    )
+    map(tuple((parse_directions, parse_nodes)), |(instructions, nodes)| {
+        NavigationMap { instructions, nodes }
+    })
     .parse(input)
 }
 
