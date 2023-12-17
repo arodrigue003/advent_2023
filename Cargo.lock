@@ -7,6 +7,7 @@ name = "advent_2023"
 version = "0.1.0"
 dependencies = [
  "bitflags 2.4.1",
+ "bucket_queue",
  "clap",
  "colored",
  "comfy-table",
@@ -80,6 +81,12 @@ name = "bitflags"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "327762f6e5a765692301e5bb513e0d9fef63be86bbc14528052b1cd3e6f03e07"
+
+[[package]]
+name = "bucket_queue"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "899ef58ed41750685cdd9900e2a49e66477835f639ca6798650a6e13e62b5463"
 
 [[package]]
 name = "cfg-if"
