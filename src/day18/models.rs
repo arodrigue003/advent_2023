@@ -8,6 +8,17 @@ pub enum Direction {
     Left,
 }
 
+impl Direction {
+    pub fn opposite(&self) -> Self {
+        match self {
+            Direction::Up => Direction::Down,
+            Direction::Right => Direction::Left,
+            Direction::Down => Direction::Up,
+            Direction::Left => Direction::Right,
+        }
+    }
+}
+
 impl Display for Direction {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -24,28 +35,15 @@ impl Display for Direction {
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
-pub struct Color {
-    pub red: u8,
-    pub green: u8,
-    pub blue: u8,
-}
-
-impl Display for Color {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "#{:02x}{:02x}{:02x}", self.red, self.green, self.blue)
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Instruction {
     pub direction: Direction,
-    pub distance: i32,
-    pub color: Color,
+    pub distance: i64,
+    // pub color: Color,
 }
 
 impl Display for Instruction {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} {} ({})", self.direction, self.distance, self.color)
+        write!(f, "{} {}", self.direction, self.distance)
     }
 }
 

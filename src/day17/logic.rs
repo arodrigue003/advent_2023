@@ -46,7 +46,7 @@ fn find_shortest_path(map: &Map, min_distance: usize, max_distance: usize) -> us
         let column = visit.column;
 
         // If the node was already visited, we don't have to do it again
-        if visited[[line, column, visit.direction as usize, visit.direction_steps]] == true {
+        if visited[[line, column, visit.direction as usize, visit.direction_steps]] {
             continue;
         }
 
@@ -173,6 +173,7 @@ fn find_shortest_path(map: &Map, min_distance: usize, max_distance: usize) -> us
 }
 
 #[inline(always)]
+#[allow(clippy::too_many_arguments)]
 fn visit_neighbor(
     map: &Map,
     min_distance: usize,
@@ -196,7 +197,7 @@ fn visit_neighbor(
             1
         };
 
-        if visited[[new_line, new_colum, new_direction as usize, direction_steps]] == false {
+        if !visited[[new_line, new_colum, new_direction as usize, direction_steps]] {
             let next_score = visit.score + map.grid[new_line][new_colum] as usize;
             if next_score < scores[[new_line, new_colum, new_direction as usize, direction_steps]] {
                 scores[[new_line, new_colum, new_direction as usize, direction_steps]] = next_score;
