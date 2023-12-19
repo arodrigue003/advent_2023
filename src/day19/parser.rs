@@ -1,36 +1,64 @@
-use crate::day19::models::{Action, Part, Rule, System, Workflow};
+use crate::day19::models::{Action, Part, PartValue, Rule, System, Test, Workflow};
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha1, digit1, line_ending, one_of};
 use nom::combinator::{map, map_res, opt};
-use nom::multi::{many1, separated_list0, separated_list1};
+use nom::multi::{many1, separated_list0};
 use nom::sequence::tuple;
 use nom::{IResult, Parser};
 use std::num::ParseIntError;
 use std::str::FromStr;
 
+impl From<char> for PartValue {
+    fn from(value: char) -> Self {
+        match value {
+            'x' => PartValue::X,
+            'm' => PartValue::M,
+            'a' => PartValue::A,
+            's' => PartValue::S,
+            _ => unreachable!(),
+        }
+    }
+}
+
+impl From<char> for Test {
+    fn from(value: char) -> Self {
+        match value {
+            '<' => Test::Lower,
+            '>' => Test::Greater,
+            _ => unreachable!(),
+        }
+    }
+}
+
 fn parse_rule(input: &str) -> IResult<&str, Rule> {
     map_res(
         tuple((one_of("xmas"), one_of("<>"), digit1, tag(":"), alpha1)),
-        |(variable, test, value, _, action)| {
-            let value = i32::from_str(value)?;
+        |(part_value, test, value, _, action)| {
+            let value = i64::from_str(value)?;
             let action = match action {
                 "A" => Action::Accepted,
                 "R" => Action::Rejected,
                 s => Action::Goto(s.to_string()),
             };
-            let test = match (variable, test) {
-                ('x', '<') => |part: &Part, value: i32| part.x < value,
-                ('x', '>') => |part: &Part, value: i32| part.x > value,
-                ('m', '<') => |part: &Part, value: i32| part.m < value,
-                ('m', '>') => |part: &Part, value: i32| part.m > value,
-                ('a', '<') => |part: &Part, value: i32| part.a < value,
-                ('a', '>') => |part: &Part, value: i32| part.a > value,
-                ('s', '<') => |part: &Part, value: i32| part.s < value,
-                ('s', '>') => |part: &Part, value: i32| part.s > value,
+            let test_func = match (part_value, test) {
+                ('x', '<') => |part: &Part, value: i64| part.x < value,
+                ('x', '>') => |part: &Part, value: i64| part.x > value,
+                ('m', '<') => |part: &Part, value: i64| part.m < value,
+                ('m', '>') => |part: &Part, value: i64| part.m > value,
+                ('a', '<') => |part: &Part, value: i64| part.a < value,
+                ('a', '>') => |part: &Part, value: i64| part.a > value,
+                ('s', '<') => |part: &Part, value: i64| part.s < value,
+                ('s', '>') => |part: &Part, value: i64| part.s > value,
                 _ => unreachable!(),
             };
 
-            Ok::<_, ParseIntError>(Rule { value, action, test })
+            Ok::<_, ParseIntError>(Rule {
+                part_value: PartValue::from(part_value),
+                test: Test::from(test),
+                value,
+                action,
+                test_func,
+            })
         },
     )
     .parse(input)
@@ -83,10 +111,10 @@ fn parse_part(input: &str) -> IResult<&str, Part> {
         )),
         |(_, x, _, m, _, a, _, s, _, _)| {
             Ok::<_, ParseIntError>(Part {
-                x: i32::from_str(x)?,
-                m: i32::from_str(m)?,
-                a: i32::from_str(a)?,
-                s: i32::from_str(s)?,
+                x: i64::from_str(x)?,
+                m: i64::from_str(m)?,
+                a: i64::from_str(a)?,
+                s: i64::from_str(s)?,
             })
         },
     )
