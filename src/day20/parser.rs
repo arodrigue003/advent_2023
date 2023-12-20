@@ -1,4 +1,4 @@
-use crate::day20::models::{CableManagement, Module, ModuleType};
+use crate::day20::models::{Broadcaster, CableManagement, Conjunction, FlipFlop, Module, ModuleType, Untyped};
 use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha0, alpha1, line_ending};
@@ -33,7 +33,7 @@ fn parse_module(input: &str) -> IResult<&str, (ModuleType, &str, Vec<&str>)> {
     .parse(input)
 }
 
-fn build_modules<'a>(mut modules_data: Vec<(ModuleType, &'a str, Vec<&'a str>)>) -> Vec<Module> {
+fn build_modules<'a>(mut modules_data: Vec<(ModuleType, &'a str, Vec<&'a str>)>) -> Vec<Box<dyn Module>> {
     // First build a hashmap of module names in order to be able to get them quickly after.
     let mut modules_positions: HashMap<_, _> = modules_data
         .iter()
@@ -67,7 +67,7 @@ fn build_modules<'a>(mut modules_data: Vec<(ModuleType, &'a str, Vec<&'a str>)>)
     let mut modules_input_offset: HashMap<&str, u16> = HashMap::new();
 
     // Build the modules
-    let mut modules = vec![];
+    let mut modules: Vec<Box<dyn Module>> = vec![];
     for (module_type, name, output) in modules_data {
         // Convert the output to a tuple of module position, offset
         let output: Vec<_> = output
@@ -81,12 +81,12 @@ fn build_modules<'a>(mut modules_data: Vec<(ModuleType, &'a str, Vec<&'a str>)>)
             })
             .collect();
 
-        modules.push(Module::new(
-            name.to_string(),
-            module_type,
-            output,
-            modules_input_count.get(name).cloned().unwrap_or_default(),
-        ))
+        modules.push(match module_type {
+            ModuleType::Broadcaster => Box::new(Broadcaster::new(output)),
+            ModuleType::FlipFlop => Box::new(FlipFlop::new(name.to_string(), output)),
+            ModuleType::Conjunction => Box::new(Conjunction::new(name.to_string(), output, modules_input_count[name])),
+            ModuleType::Untyped => Box::new(Untyped::new(name.to_string())),
+        });
     }
 
     modules
