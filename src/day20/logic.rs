@@ -1,4 +1,6 @@
 use crate::day20::models::{Broadcaster, CableManagement, Conjunction, FlipFlop, Module, ModuleType, Untyped};
+use petgraph::dot::{Config, Dot};
+use petgraph::Graph;
 use std::collections::VecDeque;
 
 impl Module for Untyped {
@@ -12,6 +14,10 @@ impl Module for Untyped {
 
     fn get_type(&self) -> ModuleType {
         ModuleType::Untyped
+    }
+
+    fn get_neighbors(&self) -> Vec<usize> {
+        vec![]
     }
 }
 
@@ -31,6 +37,10 @@ impl Module for Broadcaster {
 
     fn get_type(&self) -> ModuleType {
         ModuleType::Broadcaster
+    }
+
+    fn get_neighbors(&self) -> Vec<usize> {
+        self.output.iter().map(|(neighbor, _)| *neighbor).collect()
     }
 }
 
@@ -52,6 +62,10 @@ impl Module for FlipFlop {
     fn get_type(&self) -> ModuleType {
         ModuleType::FlipFlop
     }
+
+    fn get_neighbors(&self) -> Vec<usize> {
+        self.output.iter().map(|(neighbor, _)| *neighbor).collect()
+    }
 }
 
 impl Module for Conjunction {
@@ -68,6 +82,10 @@ impl Module for Conjunction {
 
     fn get_type(&self) -> ModuleType {
         ModuleType::Conjunction
+    }
+
+    fn get_neighbors(&self) -> Vec<usize> {
+        self.output.iter().map(|(neighbor, _)| *neighbor).collect()
     }
 }
 
@@ -117,6 +135,77 @@ pub fn solve_part_one(cable_management: &CableManagement) -> usize {
     low_count * high_count
 }
 
-pub fn solve_part_two(cable_management: &CableManagement) -> u32 {
+pub fn solve_part_two(cable_management_ref: &CableManagement) -> u32 {
+    // Create a graph with petgraph
+    let mut graph: Graph<(ModuleType, String), ()> = Graph::new();
+
+    let nodes: Vec<_> = cable_management_ref
+        .modules
+        .iter()
+        .map(|module| graph.add_node((module.get_type(), module.get_name().to_string())))
+        .collect();
+
+    for (position, module) in cable_management_ref.modules.iter().enumerate() {
+        for neighbor in module.get_neighbors() {
+            graph.add_edge(nodes[position], nodes[neighbor], ());
+        }
+    }
+
+    // println!("{:?}", Dot::with_config(&graph, &[Config::EdgeNoLabel]));
+    //
+    // // Clone the cable management to be able to modify it
+    // let mut cable_management = cable_management_ref.clone();
+    //
+    // // Get broadcaster position
+    // let broadcaster_position = cable_management
+    //     .modules
+    //     .iter()
+    //     .position(|module| module.is_broadcaster())
+    //     .unwrap();
+    //
+    // // Get bt position
+    // let bt_position = cable_management
+    //     .modules
+    //     .iter()
+    //     .position(|module| module.get_name() == "rx")
+    //     .unwrap();
+    //
+    // // Create the queue
+    // let mut queue = VecDeque::with_capacity(1000);
+    //
+    // // Store high and low count
+    // let mut count = 0;
+    //
+    // // Perform 1_000 click
+    // loop {
+    //     queue.push_back((broadcaster_position, 0, false));
+    //
+    //     // While the signal is running
+    //     while let Some((position, input_offset, is_high)) = queue.pop_front() {
+    //         // Get the new elements
+    //         if let Some((outputs, output_is_high)) =
+    //             cable_management.modules[position].get_pulses(input_offset, is_high)
+    //         {
+    //             // For each output of the module
+    //             for (destination, input_offset) in outputs {
+    //                 queue.push_back((*destination, *input_offset, output_is_high));
+    //
+    //                 // If the output was sent to bt, display it
+    //                 if *destination == bt_position {
+    //                     println!(
+    //                         "Action: {} -{}-> {} (step: {})",
+    //                         cable_management_ref.modules[position].get_name(),
+    //                         is_high,
+    //                         cable_management_ref.modules[*destination].get_name(),
+    //                         count
+    //                     )
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     count += 1;
+    // }
+
     0
 }

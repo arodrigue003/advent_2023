@@ -1,0 +1,163 @@
+digraph {
+    
+    subgraph cluster_0 {
+        style=filled;
+        color=lightgrey;
+        node [style=filled,color=white];
+        {"(FlipFlop, \"gn\")" 
+            -> "(FlipFlop, \"tn\")" 
+            -> "(FlipFlop, \"pf\")"
+            -> "(FlipFlop, \"gd\")"
+            -> "(FlipFlop, \"gc\")" 
+            -> "(FlipFlop, \"pv\")" 
+            -> "(FlipFlop, \"ps\")"
+            -> "(FlipFlop, \"rf\")"
+            -> "(FlipFlop, \"nm\")"
+            -> "(FlipFlop, \"gt\")"
+            -> "(FlipFlop, \"pp\")"
+            -> "(FlipFlop, \"gv\")"
+        }
+        
+
+        "(Conjunction, \"kb\")"->"(FlipFlop, \"gn\")"[color="red"]
+        "(Conjunction, \"kb\")"->"(FlipFlop, \"tn\")"[color="red" ]
+        "(Conjunction, \"kb\")"->"(FlipFlop, \"pf\")"[color="red" ]
+        "(Conjunction, \"kb\")"->"(FlipFlop, \"gd\")"[color="red" ]
+        "(Conjunction, \"kb\")"->"(FlipFlop, \"pv\")"[color="red" ]
+        "(Conjunction, \"kb\")"->"(FlipFlop, \"nm\")"[color="red" ]
+        "(FlipFlop, \"gn\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        "(FlipFlop, \"rf\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        "(FlipFlop, \"ps\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        "(FlipFlop, \"gt\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        "(FlipFlop, \"pp\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        "(FlipFlop, \"gv\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        "(FlipFlop, \"gc\")"->"(Conjunction, \"kb\")"[color="blue" ]
+        label = "process #1";
+    }
+  
+    subgraph cluster_2 {
+        style=filled;
+        color=lightgrey;
+        node [style=filled,color=white];
+        {"(FlipFlop, \"gb\")"
+            -> "(FlipFlop, \"vx\")"
+            -> "(FlipFlop, \"fp\")"
+            -> "(FlipFlop, \"rp\")"
+            -> "(FlipFlop, \"gh\")"
+            -> "(FlipFlop, \"td\")"
+            -> "(FlipFlop, \"kz\")"
+            -> "(FlipFlop, \"jb\")"
+            -> "(FlipFlop, \"fz\")"
+            -> "(FlipFlop, \"zq\")"
+            -> "(FlipFlop, \"xm\")"
+            -> "(FlipFlop, \"cs\")"
+        }
+        
+        "(Conjunction, \"qt\")"->"(FlipFlop, \"jb\")"[color="red" ]
+        "(Conjunction, \"qt\")"->"(FlipFlop, \"vx\")"[color="red" ]
+        "(Conjunction, \"qt\")"->"(FlipFlop, \"gh\")"[color="red" ]
+        "(Conjunction, \"qt\")"->"(FlipFlop, \"td\")"[color="red" ]
+        "(Conjunction, \"qt\")"->"(FlipFlop, \"gb\")"[color="red" ]
+        "(FlipFlop, \"xm\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"rp\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"fp\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"gb\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"cs\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"kz\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"zq\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        "(FlipFlop, \"fz\")"->"(Conjunction, \"qt\")"[color="blue" ]
+        label = "process #2";
+    }
+      
+      
+    subgraph cluster_3 {
+        style=filled;
+        color=lightgrey;
+        node [style=filled,color=white];
+        {"(FlipFlop, \"df\")"
+            -> "(FlipFlop, \"lq\")"
+            -> "(FlipFlop, \"gq\")"
+            -> "(FlipFlop, \"ch\")"
+            -> "(FlipFlop, \"qr\")"
+            -> "(FlipFlop, \"dj\")"
+            -> "(FlipFlop, \"nl\")"
+            -> "(FlipFlop, \"cc\")"
+            -> "(FlipFlop, \"vg\")"
+            -> "(FlipFlop, \"fr\")"
+            -> "(FlipFlop, \"ks\")"
+            -> "(FlipFlop, \"lc\")"
+        }
+        "(FlipFlop, \"df\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"fr\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"nl\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"lq\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"ks\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"gq\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"lc\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(FlipFlop, \"vg\")"->"(Conjunction, \"hc\")"[color="blue" ]
+        "(Conjunction, \"hc\")"->"(FlipFlop, \"qr\")"[color="red" ]
+        "(Conjunction, \"hc\")"->"(FlipFlop, \"ch\")"[color="red" ]
+        "(Conjunction, \"hc\")"->"(FlipFlop, \"df\")"[color="red" ]
+        "(Conjunction, \"hc\")"->"(FlipFlop, \"dj\")"[color="red" ]
+        "(Conjunction, \"hc\")"->"(FlipFlop, \"cc\")"[color="red" ]
+        label = "process #3";
+    }
+
+    
+    subgraph cluster_4 {
+        style=filled;
+        color=lightgrey;
+        node [style=filled,color=white];
+        {"(FlipFlop, \"rb\")"
+            ->"(FlipFlop, \"mt\")"
+            ->"(FlipFlop, \"sx\")"
+            ->"(FlipFlop, \"jl\")"
+            ->"(FlipFlop, \"jn\")"
+            ->"(FlipFlop, \"nz\")"
+            ->"(FlipFlop, \"hh\")"
+            ->"(FlipFlop, \"ms\")"
+            ->"(FlipFlop, \"xz\")"
+            ->"(FlipFlop, \"bg\")"
+            ->"(FlipFlop, \"rq\")"
+            ->"(FlipFlop, \"ts\")"
+        }
+        "(Conjunction, \"ck\")"->"(FlipFlop, \"nz\")"[color="red" ]
+        "(Conjunction, \"ck\")"->"(FlipFlop, \"rb\")"[color="red" ]
+        "(Conjunction, \"ck\")"->"(FlipFlop, \"sx\")"[color="red" ]
+        "(Conjunction, \"ck\")"->"(FlipFlop, \"ms\")"[color="red" ]
+        "(Conjunction, \"ck\")"->"(FlipFlop, \"mt\")"[color="red" ]
+        "(FlipFlop, \"xz\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"jn\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"rb\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"ts\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"jl\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"hh\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"bg\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        "(FlipFlop, \"rq\")"->"(Conjunction, \"ck\")"[color="blue" ]
+        label = "process #4";
+    }
+
+  
+  
+    subgraph cluster_5 {
+        style=filled;
+        color=lightgrey;
+        node [style=filled,color=white];
+        "(Conjunction, \"fv\")"->"(Conjunction, \"vd\")"[ ]
+        "(Conjunction, \"rd\")"->"(Conjunction, \"vd\")"[ ]
+        "(Conjunction, \"bt\")"->"(Conjunction, \"vd\")"[ ]
+        "(Conjunction, \"pr\")"->"(Conjunction, \"vd\")"[ ]
+        "(Conjunction, \"vd\")"->"(Untyped, \"rx\")"[ ]
+        label = "End";
+    }
+  
+    "(Conjunction, \"kb\")"->"(Conjunction, \"pr\")"[ ]
+    "(Conjunction, \"hc\")"->"(Conjunction, \"rd\")"[ ]
+    "(Conjunction, \"ck\")"->"(Conjunction, \"fv\")"[ ]
+    "(Conjunction, \"qt\")"->"(Conjunction, \"bt\")"[ ]
+ 
+    "(Broadcaster, \"broadcaster\")"->"(FlipFlop, \"gn\")"[ ]
+    "(Broadcaster, \"broadcaster\")"->"(FlipFlop, \"gb\")"[ ]
+    "(Broadcaster, \"broadcaster\")"->"(FlipFlop, \"rb\")"[ ]
+    "(Broadcaster, \"broadcaster\")"->"(FlipFlop, \"df\")"[ ]
+}

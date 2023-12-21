@@ -11,6 +11,8 @@ pub trait Module: Display + Debug + DynClone {
     }
 
     fn get_type(&self) -> ModuleType;
+
+    fn get_neighbors(&self) -> Vec<usize>;
 }
 
 dyn_clone::clone_trait_object!(Module);
