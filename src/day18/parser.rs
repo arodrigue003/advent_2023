@@ -1,12 +1,14 @@
-use crate::day18::models::{DigPlan, Direction, Instruction};
+use std::num::ParseIntError;
+use std::str::FromStr;
+
 use nom::bytes::complete::{tag, take};
 use nom::character::complete::{digit1, line_ending, one_of, space1};
 use nom::combinator::{map, map_res, opt};
 use nom::multi::many1;
 use nom::sequence::tuple;
 use nom::{IResult, Parser};
-use std::num::ParseIntError;
-use std::str::FromStr;
+
+use crate::day18::models::{DigPlan, Direction, Instruction};
 
 impl From<char> for Direction {
     fn from(value: char) -> Self {

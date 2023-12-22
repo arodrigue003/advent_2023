@@ -1,6 +1,7 @@
-use colored::Colorize;
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Display, Formatter};
+
+use colored::Colorize;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
 pub enum Direction {

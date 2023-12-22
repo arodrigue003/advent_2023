@@ -23,6 +23,7 @@ use advent_2023::day18::Day18;
 use advent_2023::day19::Day19;
 use advent_2023::day20::Day20;
 use advent_2023::day21::Day21;
+use advent_2023::day22::Day22;
 use advent_2023::models::AdventSolution;
 use clap::{Args, Parser, Subcommand};
 use comfy_table::presets::UTF8_FULL;
@@ -128,6 +129,7 @@ fn main() {
         Box::<Day19>::default(),
         Box::<Day20>::default(),
         Box::<Day21>::default(),
+        Box::<Day22>::default(),
     ];
 
     let arguments = Cli::parse();

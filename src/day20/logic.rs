@@ -1,7 +1,9 @@
-use crate::day20::models::{Broadcaster, CableManagement, Conjunction, FlipFlop, Module, ModuleType, Untyped};
+use std::collections::VecDeque;
+
 // use petgraph::dot::{Config, Dot};
 use petgraph::Graph;
-use std::collections::VecDeque;
+
+use crate::day20::models::{Broadcaster, CableManagement, Conjunction, FlipFlop, Module, ModuleType, Untyped};
 
 impl Module for Untyped {
     fn get_pulses(&mut self, _input_offset: u16, _is_high: bool) -> Option<(&Vec<(usize, u16)>, bool)> {

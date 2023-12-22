@@ -1,6 +1,8 @@
-use crate::day18::models::{DigPlan, Direction};
-use itertools::Itertools;
 use std::fmt::{Display, Formatter};
+
+use itertools::Itertools;
+
+use crate::day18::models::{DigPlan, Direction};
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy)]
 enum LineType {

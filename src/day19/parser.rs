@@ -1,12 +1,14 @@
-use crate::day19::models::{Action, Part, PartValue, Rule, System, Test, Workflow};
+use std::num::ParseIntError;
+use std::str::FromStr;
+
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha1, digit1, line_ending, one_of};
 use nom::combinator::{map, map_res, opt};
 use nom::multi::{many1, separated_list0};
 use nom::sequence::tuple;
 use nom::{IResult, Parser};
-use std::num::ParseIntError;
-use std::str::FromStr;
+
+use crate::day19::models::{Action, Part, PartValue, Rule, System, Test, Workflow};
 
 impl From<char> for PartValue {
     fn from(value: char) -> Self {

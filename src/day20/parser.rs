@@ -1,4 +1,5 @@
-use crate::day20::models::{Broadcaster, CableManagement, Conjunction, FlipFlop, Module, ModuleType, Untyped};
+use std::collections::HashMap;
+
 use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha0, alpha1, line_ending};
@@ -6,7 +7,8 @@ use nom::combinator::{map, opt};
 use nom::multi::{many1, separated_list1};
 use nom::sequence::tuple;
 use nom::{IResult, Parser};
-use std::collections::HashMap;
+
+use crate::day20::models::{Broadcaster, CableManagement, Conjunction, FlipFlop, Module, ModuleType, Untyped};
 
 impl From<&str> for ModuleType {
     fn from(value: &str) -> Self {

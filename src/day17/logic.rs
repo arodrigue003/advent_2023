@@ -1,7 +1,9 @@
-use crate::day17::models::{Direction, Map};
+use std::collections::VecDeque;
+
 use bucket_queue::{BucketQueue, FirstInFirstOutQueue};
 use ndarray::{Array4, Axis};
-use std::collections::VecDeque;
+
+use crate::day17::models::{Direction, Map};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone)]
 struct VisitNext {

@@ -1,5 +1,6 @@
-use crate::day16::models::{Contraption, Direction, Tile, TileContent};
 use std::cmp::max;
+
+use crate::day16::models::{Contraption, Direction, Tile, TileContent};
 
 impl Tile {
     pub fn get_output_direction(&self, direction: Direction) -> Direction {

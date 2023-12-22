@@ -1,5 +1,6 @@
-use crate::day19::models::{Action, Part, PartValue, Rule, System, Test, Workflow};
 use std::collections::{HashMap, VecDeque};
+
+use crate::day19::models::{Action, Part, PartValue, Rule, System, Test, Workflow};
 
 impl Rule {
     fn get_action(&self, part: &Part) -> Option<&Action> {

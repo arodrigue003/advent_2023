@@ -1,5 +1,6 @@
-use dyn_clone::DynClone;
 use std::fmt::{Debug, Display, Formatter};
+
+use dyn_clone::DynClone;
 
 pub trait Module: Display + Debug + DynClone {
     fn get_pulses(&mut self, input_offset: u16, is_high: bool) -> Option<(&Vec<(usize, u16)>, bool)>;

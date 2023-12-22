@@ -1,7 +1,9 @@
-use crate::day21::models::Map;
+use std::collections::VecDeque;
+
 use bucket_queue::{BucketQueue, FirstInFirstOutQueue};
 use ndarray::Array2;
-use std::collections::VecDeque;
+
+use crate::day21::models::Map;
 
 fn count_accessible_tiles(map: &Map, start: (usize, usize), steps: usize, parity: usize) -> usize {
     if steps == 0 {
@@ -83,7 +85,7 @@ fn solve_part_two_bruteforce(map: &Map, start: (usize, usize), steps: usize) -> 
         map_count / 2 * map.height + start.0,
         map_count / 2 * map.width + start.1,
     );
-    let new_map = Map::new(grid, start.clone());
+    let new_map = Map::new(grid, start);
     // println!("{new_map}");
 
     count_accessible_tiles(&new_map, start, steps, steps % 2)
@@ -234,7 +236,9 @@ pub fn solve_part_two(map: &Map) -> usize {
     let out_diagonal_count = main_line_length;
 
     // Sum it up
-    let result = full_map_positions_count_base_par * full_grid_count_base_par
+    
+
+    full_map_positions_count_base_par * full_grid_count_base_par
         + full_map_positions_count_other_par * full_grid_count_other_par
         + left_map_position_count
         + right_map_position_count
@@ -249,7 +253,5 @@ pub fn solve_part_two(map: &Map) -> usize {
             * (upper_left_map_position_count_2
                 + upper_right_map_position_count_2
                 + lower_left_map_position_count_2
-                + lower_right_map_position_count_2);
-
-    result
+                + lower_right_map_position_count_2)
 }
