@@ -23,7 +23,9 @@ impl AdventSolution for Day22 {
     }
 
     fn prepare(&mut self) {
-        self.prepared_data = Some(prepare_data(self.parsed_data.as_ref().unwrap()))
+        let (bricks, graph) = prepare_data(self.parsed_data.clone().unwrap());
+        self.parsed_data = Some(bricks);
+        self.prepared_data = Some(graph)
     }
 
     fn solve_part_one(&self) -> i128 {
@@ -31,6 +33,6 @@ impl AdventSolution for Day22 {
     }
 
     fn solve_part_two(&self) -> i128 {
-        solve_part_two(self.parsed_data.as_ref().unwrap()) as i128
+        solve_part_two(self.prepared_data.as_ref().unwrap()) as i128
     }
 }

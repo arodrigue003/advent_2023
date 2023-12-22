@@ -3,12 +3,9 @@ use ndarray::Array2;
 
 use petgraph::{Graph, Incoming, Outgoing};
 use std::cmp::Reverse;
-use std::collections::BinaryHeap;
+use std::collections::{BinaryHeap, VecDeque};
 
-pub fn prepare_data(falling_bricks: &FallingBricks) -> Graph<usize, ()> {
-    // Clone the data
-    let mut falling_bricks = falling_bricks.clone();
-
+pub fn prepare_data(mut falling_bricks: FallingBricks) -> (FallingBricks, Graph<usize, ()>) {
     // Determinate the grid size
     let ends: Vec<_> = falling_bricks.bricks.iter().map(Brick::end).collect();
     let max_x = ends.iter().map(Point::x).max().unwrap();
@@ -77,7 +74,7 @@ pub fn prepare_data(falling_bricks: &FallingBricks) -> Graph<usize, ()> {
         falling_brick.fall(falling_brick.start_offset.z - max_z);
     }
 
-    graph
+    (falling_bricks, graph)
 }
 
 pub fn solve_part_one(graph: &Graph<usize, ()>) -> usize {
@@ -92,6 +89,42 @@ pub fn solve_part_one(graph: &Graph<usize, ()>) -> usize {
         .count()
 }
 
-pub fn solve_part_two(_falling_bricks: &FallingBricks) -> u32 {
-    0
+pub fn solve_part_two(graph: &Graph<usize, ()>) -> usize {
+    let node_count = graph.node_count();
+
+    let mut res = 0;
+
+    for start_node in graph.node_indices() {
+        // Set of nodes we deleted
+        let mut removed_nodes = vec![false; node_count];
+
+        // List of neighbors still available
+        let mut queue = VecDeque::new();
+
+        // Add the initial node into the structs
+        removed_nodes[start_node.index()] = true;
+        queue.push_back(start_node);
+
+        // Main algorithm
+        while let Some(node) = queue.pop_front() {
+            // Get node neighbors coming to us
+            for neighbor in graph.neighbors_directed(node, Incoming) {
+                // check if every support of this node is dead
+                if graph
+                    .neighbors_directed(neighbor, Outgoing)
+                    .all(|neighbor| removed_nodes[neighbor.index()])
+                {
+                    // Node is dead
+                    removed_nodes[neighbor.index()] = true;
+
+                    // Add us to the list of interest
+                    queue.push_back(neighbor);
+                }
+            }
+        }
+
+        res += removed_nodes.iter().filter(|removed| **removed).count() - 1;
+    }
+
+    res
 }
