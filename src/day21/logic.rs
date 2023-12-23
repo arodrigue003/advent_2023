@@ -236,7 +236,6 @@ pub fn solve_part_two(map: &Map) -> usize {
     let out_diagonal_count = main_line_length;
 
     // Sum it up
-    
 
     full_map_positions_count_base_par * full_grid_count_base_par
         + full_map_positions_count_other_par * full_grid_count_other_par
