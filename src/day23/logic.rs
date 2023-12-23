@@ -1,6 +1,9 @@
 use crate::day23::models::{Map, Tile};
+use itertools::Itertools;
 use ndarray::Array2;
-use petgraph::algo::bellman_ford;
+use petgraph::algo::{all_simple_paths, bellman_ford};
+use petgraph::graph::NodeIndex;
+use petgraph::prelude::EdgeRef;
 use petgraph::Graph;
 use std::collections::{HashMap, VecDeque};
 
@@ -22,9 +25,7 @@ fn is_intersection(map: &Map, line: usize, column: usize) -> bool {
     neighbor_count > 2
 }
 
-pub fn solve_part_one(map: &Map) -> i64 {
-    // Construct the negative graph of the problem
-
+pub fn prepare_data(map: &Map) -> (Graph<(usize, usize), f64>, NodeIndex, NodeIndex) {
     // Create the graph
     let mut graph = Graph::new();
 
@@ -113,12 +114,49 @@ pub fn solve_part_one(map: &Map) -> i64 {
 
         visited[[line, column]] = true;
     }
+    (graph, start_node, end_node)
+}
 
+pub fn solve_part_one((graph, start_node, end_node): &(Graph<(usize, usize), f64>, NodeIndex, NodeIndex)) -> i64 {
     // Use Bellman Ford to get the lowest distance in -G, return -distance.
-    let res = bellman_ford(&graph, start_node).unwrap();
+    let res = bellman_ford(graph, *start_node).unwrap();
     -(res.distances[end_node.index()] as i64)
 }
 
-pub fn solve_part_two(map: &Map) -> u32 {
-    0
+pub fn solve_part_two((graph, start_node, end_node): &(Graph<(usize, usize), f64>, NodeIndex, NodeIndex)) -> usize {
+    // First, we need to convert the DAG of -G to an undirected graph of G
+    let mut undirected_graph = Graph::new_undirected();
+
+    // Construct a hashmap of every nodes in the first graph
+    let nodes: HashMap<_, _> = graph
+        .node_indices()
+        .map(|node| {
+            let (line, column) = graph.node_weight(node).unwrap();
+            ((*line, *column), undirected_graph.add_node((*line, *column)))
+        })
+        .collect();
+
+    // Add the edges
+    for edge in graph.edge_references() {
+        let source = nodes[&graph.node_weight(edge.source()).unwrap()];
+        let target = nodes[&graph.node_weight(edge.target()).unwrap()];
+
+        undirected_graph.add_edge(source, target, (-edge.weight()) as usize);
+    }
+
+    // Get the new start node and end node from the nodes map
+    let start_node = nodes[&graph.node_weight(*start_node).unwrap()];
+    let end_node = nodes[&graph.node_weight(*end_node).unwrap()];
+
+    // Generate every simple path and keep the longest one
+    all_simple_paths::<Vec<_>, _>(&undirected_graph, start_node, end_node, 0, None)
+        .map(|path| {
+            path.iter().tuple_windows().fold(0, |acc, (start, end)| {
+                acc + undirected_graph
+                    .edge_weight(undirected_graph.edges_connecting(*start, *end).next().unwrap().id())
+                    .unwrap()
+            })
+        })
+        .max()
+        .unwrap()
 }
