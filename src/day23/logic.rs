@@ -1,10 +1,9 @@
 use crate::day23::models::{Map, Tile};
-use itertools::Itertools;
 use ndarray::Array2;
-use petgraph::algo::{all_simple_paths, bellman_ford};
+use petgraph::algo::bellman_ford;
 use petgraph::graph::NodeIndex;
 use petgraph::prelude::EdgeRef;
-use petgraph::Graph;
+use petgraph::{Graph, Undirected};
 use std::collections::{HashMap, VecDeque};
 
 fn is_intersection(map: &Map, line: usize, column: usize) -> bool {
@@ -123,6 +122,31 @@ pub fn solve_part_one((graph, start_node, end_node): &(Graph<(usize, usize), f64
     -(res.distances[end_node.index()] as i64)
 }
 
+fn get_all_paths(
+    graph: &Graph<(usize, usize), usize, Undirected>,
+    start: NodeIndex,
+    end: NodeIndex,
+    visited: &mut Vec<bool>,
+    max_len: &mut usize,
+    current_len: usize,
+) {
+    visited[start.index()] = true;
+    if start == end {
+        if current_len > *max_len {
+            *max_len = current_len;
+        }
+    } else {
+        for edge in graph.edges(start) {
+            let target = edge.target();
+            if !visited[target.index()] {
+                get_all_paths(graph, target, end, visited, max_len, current_len + edge.weight());
+            }
+        }
+    }
+
+    visited[start.index()] = false;
+}
+
 pub fn solve_part_two((graph, start_node, end_node): &(Graph<(usize, usize), f64>, NodeIndex, NodeIndex)) -> usize {
     // First, we need to convert the DAG of -G to an undirected graph of G
     let mut undirected_graph = Graph::new_undirected();
@@ -148,15 +172,10 @@ pub fn solve_part_two((graph, start_node, end_node): &(Graph<(usize, usize), f64
     let start_node = nodes[&graph.node_weight(*start_node).unwrap()];
     let end_node = nodes[&graph.node_weight(*end_node).unwrap()];
 
-    // Generate every simple path and keep the longest one
-    all_simple_paths::<Vec<_>, _>(&undirected_graph, start_node, end_node, 0, None)
-        .map(|path| {
-            path.iter().tuple_windows().fold(0, |acc, (start, end)| {
-                acc + undirected_graph
-                    .edge_weight(undirected_graph.edges_connecting(*start, *end).next().unwrap().id())
-                    .unwrap()
-            })
-        })
-        .max()
-        .unwrap()
+    // Store visited nodes
+    let mut visited = vec![false; undirected_graph.node_count()];
+    let mut max_len = 0;
+    get_all_paths(&undirected_graph, start_node, end_node, &mut visited, &mut max_len, 0);
+
+    max_len
 }
