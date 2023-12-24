@@ -15,5 +15,5 @@ fn test_part_one() {
 
 #[test]
 fn test_part_two() {
-    test_part_two_common(Day24::default(), INPUT_EXAMPLE, 1);
+    test_part_two_common(Day24::default(), INPUT_EXAMPLE, 47);
 }

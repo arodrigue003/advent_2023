@@ -101,84 +101,6 @@ fn get_b_for_x(hail: &Hail) -> HashSet<i128> {
     possible_res
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
-enum ASolution {
-    Simple(i128),
-    Period((i128, i128)),
-}
-
-fn get_a_for_x(hail: &Hail, b_x: i128) -> ASolution {
-    // If b_x is one of the hail velocity, a is forced
-    for hailstone in &hail.hailstones {
-        if b_x == hailstone.v.x {
-            return ASolution::Simple(hailstone.p0.x);
-        }
-    }
-
-    let periods: Vec<_> = hail
-        .hailstones
-        .iter()
-        .map(|hailstone| solve_periodicity(hailstone.p0.x, hailstone.v.x - b_x, 0, 1).unwrap())
-        .collect();
-
-    // Merge them into one
-    ASolution::Period(
-        periods
-            .iter()
-            .fold((0, 1), |(acc_offset, acc_period), (offset, period)| {
-                solve_periodicity(acc_offset, acc_period, *offset, *period).unwrap()
-            }),
-    )
-}
-
-fn get_a_for_y(hail: &Hail, b_y: i128) -> ASolution {
-    // If b_x is one of the hail velocity, a is forced
-    for hailstone in &hail.hailstones {
-        if b_y == hailstone.v.y {
-            return ASolution::Simple(hailstone.p0.y);
-        }
-    }
-
-    let periods: Vec<_> = hail
-        .hailstones
-        .iter()
-        .map(|hailstone| solve_periodicity(hailstone.p0.y, hailstone.v.y - b_y, 0, 1).unwrap())
-        .collect();
-
-    // Merge them into one
-    ASolution::Period(
-        periods
-            .iter()
-            .fold((0, 1), |(acc_offset, acc_period), (offset, period)| {
-                solve_periodicity(acc_offset, acc_period, *offset, *period).unwrap()
-            }),
-    )
-}
-
-fn get_a_for_z(hail: &Hail, b_z: i128) -> ASolution {
-    // If b_x is one of the hail velocity, a is forced
-    for hailstone in &hail.hailstones {
-        if b_z == hailstone.v.z {
-            return ASolution::Simple(hailstone.p0.z);
-        }
-    }
-
-    let periods: Vec<_> = hail
-        .hailstones
-        .iter()
-        .map(|hailstone| solve_periodicity(hailstone.p0.z, hailstone.v.z - b_z, 0, 1).unwrap())
-        .collect();
-
-    // Merge them into one
-    ASolution::Period(
-        periods
-            .iter()
-            .fold((0, 1), |(acc_offset, acc_period), (offset, period)| {
-                solve_periodicity(acc_offset, acc_period, *offset, *period).unwrap()
-            }),
-    )
-}
-
 fn get_b_for_y(hail: &Hail) -> HashSet<i128> {
     let mut possible_res = HashSet::new();
     for (a, b) in hail.hailstones.iter().tuple_windows() {
@@ -235,129 +157,7 @@ fn get_b_for_z(hail: &Hail) -> HashSet<i128> {
     possible_res
 }
 
-/// Implementation of the extended euclidean algorithm
-/// This is taken from https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
-/// return the tuple (left_coef, right_coef, gcd)
-fn extended_gcd(a: i128, b: i128) -> (i128, i128, i128) {
-    let mut old_r = a;
-    let mut r = b;
-    let mut old_s = 1;
-    let mut s = 0;
-    let mut old_t = 0;
-    let mut t = 1;
-
-    loop {
-        if r == 0 {
-            break;
-        }
-        let quotient = old_r / r;
-
-        let prov = r;
-        r = old_r - quotient * r;
-        old_r = prov;
-
-        let prov = s;
-        s = old_s - quotient * s;
-        old_s = prov;
-
-        let prov = t;
-        t = old_t - quotient * t;
-        old_t = prov
-    }
-
-    if old_r < 0 {
-        (-old_s, -old_t, -old_r)
-    } else {
-        (old_s, old_t, old_r)
-    }
-}
-
-/// Find the smallest integer solutions of `a + bx = c + dy`
-/// If a solution is found return the offset and periodicity (e, f) that allows us to generate
-/// every value where this equality has integer solution using the formula `en + f` where n is
-/// a positive integer.
-///
-/// * In order to solve the equation we transform it to a linear diophantine equation.
-///
-/// * We transform the equation to an equation with the form `ex - fy = g`.
-///
-/// * We can now find two values `x0` and `y0` that satisfy this equation if `g` is a multiple of
-/// `gcd(e, -f)`. To do that we use the extended gcd algorithm and we get two coeff verifying:
-/// `left_coeff*e - right_coeff*f = gcd(e, -f)`.
-///
-/// * We now can compute `x0` and `y0` to have a solution for `ex - fy = g` by the operation `g / gcd`
-/// This work because `g` is a multiple of the `gcd`, as well as `e` and `-f`.
-/// We know have `x0 = left_coef * g / gcd` and `y0 = right_coef * g / gcd` satisfying
-/// `a + bx = c + dy`
-///
-/// * Now we know that every solution has the form `x0 - fn / gcd` and `y0 - en / gcn` for every
-/// integer n. We want to find the maximal value of n where x and y are positive. This will allow
-/// us to find the minimal offset at witch both side of the initial equation meats up.
-/// To do that we have to find the maximal value of n for which `n <= x0 * gcd / f` and  
-/// `n <= y0 * gcd / e`. We note it `max_n`.
-///
-/// * Finally, we can determinate the offset by evaluating `a + bx = a + b(x0 - fn / gcd)` for
-/// `n = max_n`.
-/// * The periodicity is equal to the coefficient in front of `x`, that is equal to
-/// `b * f / gcd)`.
-fn solve_periodicity(a: i128, b: i128, c: i128, d: i128) -> Option<(i128, i128)> {
-    // Transform it to the regular form of a linear diophantine equation (ex - fy = g)
-    let e = b;
-    let f = d;
-    let g = c - a;
-
-    // Compute the extended gcd of e and -f
-    let (left_coef, right_coef, gcd) = extended_gcd(e, -f);
-
-    if g % gcd != 0 {
-        // println!("no solution because of the gcd");
-        return None;
-    }
-
-    // Find a first solution thanks to the bezout coefficients
-    // Here we know that x0 * e - y0 * f = g
-    let x0 = left_coef * g / gcd;
-    let y0 = right_coef * g / gcd;
-
-    // Now we know that every solution has the form x0 - fn / gcd and y0 - en / gcn for every
-    // integer n.
-    // We now need to find the smallest positive solution to theses equations
-    // to do that we need to find the first integer value for which of theses solutions is
-    // positive
-    let max_n = (x0 * gcd).div_euclid(f).min((y0 * gcd).div_euclid(e));
-
-    // Offset is the application of the minimal solution we found for a + bx
-    let offset = a + b * (x0 - f * max_n / gcd);
-
-    // periodicity is equal to b * f / gcd (b times n coef)
-    let periodicity = b * f / gcd;
-
-    // println!(
-    //     "a={}, b={}, c={}, d={}, e={}, f={}, g={}, left_coef={}, right_coef={}, gcd={}, \
-    //     x0={}, y0={}, max_n={}, offset={}, periodicity={}, check1={}, check2={}",
-    //     a,
-    //     b,
-    //     c,
-    //     d,
-    //     e,
-    //     f,
-    //     g,
-    //     left_coef,
-    //     right_coef,
-    //     gcd,
-    //     x0,
-    //     y0,
-    //     max_n,
-    //     offset,
-    //     periodicity,
-    //     left_coef * e - right_coef * f,
-    //     x0 * e - y0 * f
-    // );
-
-    Some((offset, periodicity))
-}
-
-pub fn solve_part_two(hail: &Hail) -> usize {
+pub fn solve_part_two(hail: &Hail) -> i128 {
     // Clone hail to be able to modify it
     let mut hail = hail.clone();
 
@@ -372,7 +172,6 @@ pub fn solve_part_two(hail: &Hail) -> usize {
         // example
         unreachable!()
     };
-    let a_x = get_a_for_x(&hail, b_x);
 
     // Sort it by vy
     hail.hailstones.sort_by_cached_key(|hailstone| hailstone.v.y);
@@ -386,7 +185,6 @@ pub fn solve_part_two(hail: &Hail) -> usize {
         assert!(b_y.contains(&1));
         1
     };
-    let a_y = get_a_for_y(&hail, b_y);
 
     // Sort it by vz
     hail.hailstones.sort_by_cached_key(|hailstone| hailstone.v.z);
@@ -400,37 +198,58 @@ pub fn solve_part_two(hail: &Hail) -> usize {
         assert!(b_z.contains(&2));
         2
     };
-    let a_z = get_a_for_z(&hail, b_z);
 
-    println!("Velocity: ({}, {}, {})", b_x, b_y, b_z);
-    println!("Start: ({:?}, {:?}, {:?})", a_x, a_y, a_z);
+    for hailstone in &hail.hailstones {
+        if b_x == hailstone.v.x {
+            let a_x = hailstone.p0.x;
 
-    // println!(
-    //     "{:?}",
-    //     factorize64((339598398806870i64 - 325248475515080i64).abs() as u64)
-    // );
+            // Compute t for the first hailstone different from this one
+            let target = hail.hailstones.iter().find(|h| h.v.x != b_x).unwrap();
 
-    // Find the prime factors of the value
-    // let res = factorize64(18u64.abs_diff(12u64));
-    // let res = factorize64((339598398806870i64 - 325248475515080i64).abs() as u64);
-    //
-    // // Compute every divisor of the value
-    // let mut factors = vec![1];
-    // for (prime_factor, count) in res.into_iter() {
-    //     // Update factors vec by choosing how many times we multiply by factor
-    //     factors = factors
-    //         .into_iter()
-    //         .flat_map(|factor| (0..=count as u32).map(move |i| factor * prime_factor.pow(i)))
-    //         .collect();
-    // }
-    // let factors: HashSet<_> = factors.into_iter().collect();
-    //
-    // // println!("{:?}", factors);
-    //
-    // println!("{:?}", get_possibles_b(18, 12, -1));
-    // println!("{:?}", get_possibles_b(339598398806870, 325248475515080, -95));
-    //
-    // factors.len()
+            // Compute t for this hailstone
+            let t = (a_x - target.p0.x) / (target.v.x - b_x);
 
-    0
+            // compute a_y and a_z
+            let a_y = target.p0.y + t * target.v.y - t * b_y;
+            let a_z = target.p0.z + t * target.v.z - t * b_z;
+
+            return a_x + a_y + a_z;
+        }
+    }
+    for hailstone in &hail.hailstones {
+        if b_y == hailstone.v.y {
+            let a_y = hailstone.p0.y;
+
+            // Compute t for the first hailstone different from this one
+            let target = hail.hailstones.iter().find(|h| h.v.y != b_y).unwrap();
+
+            // Compute t for this hailstone
+            let t = (a_y - target.p0.y) / (target.v.y - b_y);
+
+            // compute a_x and a_z
+            let a_x = target.p0.x + t * target.v.x - t * b_x;
+            let a_z = target.p0.z + t * target.v.z - t * b_z;
+
+            return a_x + a_y + a_z;
+        }
+    }
+    for hailstone in &hail.hailstones {
+        if b_z == hailstone.v.z {
+            let a_z = hailstone.p0.z;
+
+            // Compute t for the first hailstone different from this one
+            let target = hail.hailstones.iter().find(|h| h.v.z != b_z).unwrap();
+
+            // Compute t for this hailstone
+            let t = (a_z - target.p0.z) / (target.v.z - b_z);
+
+            // compute a_x and a_z
+            let a_x = target.p0.x + t * target.v.x - t * b_x;
+            let a_y = target.p0.y + t * target.v.y - t * b_y;
+
+            return a_x + a_y + a_z;
+        }
+    }
+
+    unreachable!();
 }
