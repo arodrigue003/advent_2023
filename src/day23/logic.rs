@@ -1,4 +1,5 @@
 use crate::day23::models::{Map, Tile};
+use crate::day23::PreparedDataType;
 use ndarray::Array2;
 use petgraph::algo::bellman_ford;
 use petgraph::graph::NodeIndex;
@@ -116,7 +117,7 @@ pub fn prepare_data(map: &Map) -> (Graph<(usize, usize), f64>, NodeIndex, NodeIn
     (graph, start_node, end_node)
 }
 
-pub fn solve_part_one((graph, start_node, end_node): &(Graph<(usize, usize), f64>, NodeIndex, NodeIndex)) -> i64 {
+pub fn solve_part_one((graph, start_node, end_node): &PreparedDataType) -> i64 {
     // Use Bellman Ford to get the lowest distance in -G, return -distance.
     let res = bellman_ford(graph, *start_node).unwrap();
     -(res.distances[end_node.index()] as i64)
@@ -147,7 +148,7 @@ fn get_all_paths(
     visited[start.index()] = false;
 }
 
-pub fn solve_part_two((graph, start_node, end_node): &(Graph<(usize, usize), f64>, NodeIndex, NodeIndex)) -> usize {
+pub fn solve_part_two((graph, start_node, end_node): &PreparedDataType) -> usize {
     // First, we need to convert the DAG of -G to an undirected graph of G
     let mut undirected_graph = Graph::new_undirected();
 

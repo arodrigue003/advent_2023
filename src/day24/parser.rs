@@ -8,7 +8,7 @@ use nom::{IResult, Parser};
 use std::str::FromStr;
 
 fn parse_number(input: &str) -> IResult<&str, i128> {
-    map_res(recognize(tuple((opt(tag("-")), digit1))), |value| i128::from_str(value)).parse(input)
+    map_res(recognize(tuple((opt(tag("-")), digit1))), i128::from_str).parse(input)
 }
 
 fn parse_hailstone(input: &str) -> IResult<&str, Hailstone> {

@@ -3,6 +3,7 @@ use itertools::Itertools;
 use num_prime::nt_funcs::factorize64;
 use std::collections::HashSet;
 
+#[allow(clippy::comparison_chain)]
 fn compute_intersection(h1: &Hailstone, h2: &Hailstone) -> Option<(i128, i128, i128)> {
     let left_num = h1.p0.y * h1.v.x - h1.p0.x * h1.v.y;
     let right_num = h2.p0.y * h2.v.x - h2.p0.x * h2.v.y;
@@ -78,7 +79,7 @@ fn get_b_for_x(hail: &Hail) -> HashSet<i128> {
     for (a, b) in hail.hailstones.iter().tuple_windows() {
         if a.v.x == b.v.x {
             let possibles_b = get_possibles_b(a.p0.x, b.p0.x, a.v.x);
-            if possible_res.len() == 0 {
+            if possible_res.is_empty() {
                 // We didn't have possible values yet, set the set to this result
                 possible_res = possibles_b;
             } else {
@@ -86,7 +87,7 @@ fn get_b_for_x(hail: &Hail) -> HashSet<i128> {
                 possible_res = possible_res.intersection(&possibles_b).cloned().collect();
 
                 // The result must not be empty
-                if possible_res.len() == 0 {
+                if possible_res.is_empty() {
                     panic!("The problem does not have a solution")
                 }
 
@@ -106,7 +107,7 @@ fn get_b_for_y(hail: &Hail) -> HashSet<i128> {
     for (a, b) in hail.hailstones.iter().tuple_windows() {
         if a.v.y == b.v.y {
             let possibles_b = get_possibles_b(a.p0.y, b.p0.y, a.v.y);
-            if possible_res.len() == 0 {
+            if possible_res.is_empty() {
                 // We didn't have possible values yet, set the set to this result
                 possible_res = possibles_b;
             } else {
@@ -114,7 +115,7 @@ fn get_b_for_y(hail: &Hail) -> HashSet<i128> {
                 possible_res = possible_res.intersection(&possibles_b).cloned().collect();
 
                 // The result must not be empty
-                if possible_res.len() == 0 {
+                if possible_res.is_empty() {
                     panic!("The problem does not have a solution")
                 }
 
@@ -134,7 +135,7 @@ fn get_b_for_z(hail: &Hail) -> HashSet<i128> {
     for (a, b) in hail.hailstones.iter().tuple_windows() {
         if a.v.z == b.v.z {
             let possibles_b = get_possibles_b(a.p0.z, b.p0.z, a.v.z);
-            if possible_res.len() == 0 {
+            if possible_res.is_empty() {
                 // We didn't have possible values yet, set the set to this result
                 possible_res = possibles_b;
             } else {
@@ -142,7 +143,7 @@ fn get_b_for_z(hail: &Hail) -> HashSet<i128> {
                 possible_res = possible_res.intersection(&possibles_b).cloned().collect();
 
                 // The result must not be empty
-                if possible_res.len() == 0 {
+                if possible_res.is_empty() {
                     panic!("The problem does not have a solution")
                 }
 
@@ -157,6 +158,7 @@ fn get_b_for_z(hail: &Hail) -> HashSet<i128> {
     possible_res
 }
 
+#[allow(clippy::comparison_chain, clippy::if_same_then_else)]
 pub fn solve_part_two(hail: &Hail) -> i128 {
     // Clone hail to be able to modify it
     let mut hail = hail.clone();
@@ -166,7 +168,7 @@ pub fn solve_part_two(hail: &Hail) -> i128 {
     let b_x = get_b_for_x(&hail);
     let b_x = if b_x.len() == 1 {
         b_x.into_iter().next().unwrap()
-    } else if b_x.len() == 0 {
+    } else if b_x.is_empty() {
         unreachable!()
     } else {
         // example
@@ -178,7 +180,7 @@ pub fn solve_part_two(hail: &Hail) -> i128 {
     let b_y = get_b_for_y(&hail);
     let b_y = if b_y.len() == 1 {
         b_y.into_iter().next().unwrap()
-    } else if b_y.len() == 0 {
+    } else if b_y.is_empty() {
         unreachable!()
     } else {
         // example
@@ -191,7 +193,7 @@ pub fn solve_part_two(hail: &Hail) -> i128 {
     let b_z = get_b_for_z(&hail);
     let b_z = if b_z.len() == 1 {
         b_z.into_iter().next().unwrap()
-    } else if b_z.len() == 0 {
+    } else if b_z.is_empty() {
         unreachable!()
     } else {
         // example

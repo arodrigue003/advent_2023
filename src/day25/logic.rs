@@ -14,13 +14,12 @@ pub fn solve_part_one(connections: &[Connection]) -> u32 {
 
     for connection in connections {
         // get the node from the map
-        let start = nodes
+        let start = *nodes
             .entry(&connection.name)
-            .or_insert_with(|| graph.add_node(1))
-            .clone();
+            .or_insert_with(|| graph.add_node(1));
 
         for other in &connection.others {
-            let end = nodes.entry(&other).or_insert_with(|| graph.add_node(1));
+            let end = nodes.entry(other).or_insert_with(|| graph.add_node(1));
 
             graph.add_edge(start, *end, 1);
         }
@@ -47,7 +46,7 @@ fn get_result(graph: &Graph<u32, i32, Undirected>) -> Option<u32> {
         let (start, end) = new_graph.edge_endpoints(edge_index).unwrap();
 
         // Connect every edge to end to start instead
-        let neighbors: Vec<_> = new_graph.neighbors_undirected(end).into_iter().collect();
+        let neighbors: Vec<_> = new_graph.neighbors_undirected(end).collect();
         for neighbor in neighbors {
             if start != neighbor {
                 new_graph.add_edge(start, neighbor, 1);
@@ -55,7 +54,7 @@ fn get_result(graph: &Graph<u32, i32, Undirected>) -> Option<u32> {
         }
 
         // Update the weight of start to take into account the removal of end
-        new_graph[start] = new_graph[start] + new_graph[end];
+        new_graph[start] += new_graph[end];
 
         // Pop end
         new_graph.remove_node(end);

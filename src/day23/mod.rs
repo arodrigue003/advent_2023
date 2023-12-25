@@ -12,10 +12,12 @@ use crate::models::AdventSolution;
 use petgraph::graph::NodeIndex;
 use petgraph::Graph;
 
+type PreparedDataType = (Graph<(usize, usize), f64>, NodeIndex, NodeIndex);
+
 #[derive(Default)]
 pub struct Day23 {
     parsed_data: Option<Map>,
-    prepared_data: Option<(Graph<(usize, usize), f64>, NodeIndex, NodeIndex)>,
+    prepared_data: Option<PreparedDataType>,
 }
 
 impl AdventSolution for Day23 {
